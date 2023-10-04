@@ -1,0 +1,586 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */; };
+		81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */; };
+		81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */; };
+		81E4C5B52ACD535B00BEAA2A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B42ACD535B00BEAA2A /* Preview Assets.xcassets */; };
+		81E4C5C02ACD535C00BEAA2A /* BearAppSyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5BF2ACD535C00BEAA2A /* BearAppSyncTests.swift */; };
+		81E4C5CA2ACD535C00BEAA2A /* BearAppSyncUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5C92ACD535C00BEAA2A /* BearAppSyncUITests.swift */; };
+		81E4C5CC2ACD535C00BEAA2A /* BearAppSyncUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5CB2ACD535C00BEAA2A /* BearAppSyncUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		81E4C5BC2ACD535C00BEAA2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 81E4C5A22ACD535A00BEAA2A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 81E4C5A92ACD535A00BEAA2A;
+			remoteInfo = BearAppSync;
+		};
+		81E4C5C62ACD535C00BEAA2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 81E4C5A22ACD535A00BEAA2A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 81E4C5A92ACD535A00BEAA2A;
+			remoteInfo = BearAppSync;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BearAppSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncApp.swift; sourceTree = "<group>"; };
+		81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		81E4C5B42ACD535B00BEAA2A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		81E4C5B62ACD535B00BEAA2A /* BearAppSync.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BearAppSync.entitlements; sourceTree = "<group>"; };
+		81E4C5BB2ACD535C00BEAA2A /* BearAppSyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BearAppSyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E4C5BF2ACD535C00BEAA2A /* BearAppSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncTests.swift; sourceTree = "<group>"; };
+		81E4C5C52ACD535C00BEAA2A /* BearAppSyncUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BearAppSyncUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E4C5C92ACD535C00BEAA2A /* BearAppSyncUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncUITests.swift; sourceTree = "<group>"; };
+		81E4C5CB2ACD535C00BEAA2A /* BearAppSyncUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		81E4C5A72ACD535A00BEAA2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E4C5B82ACD535C00BEAA2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E4C5C22ACD535C00BEAA2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		81E4C5A12ACD535A00BEAA2A = {
+			isa = PBXGroup;
+			children = (
+				81E4C5AC2ACD535A00BEAA2A /* BearAppSync */,
+				81E4C5BE2ACD535C00BEAA2A /* BearAppSyncTests */,
+				81E4C5C82ACD535C00BEAA2A /* BearAppSyncUITests */,
+				81E4C5AB2ACD535A00BEAA2A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81E4C5AB2ACD535A00BEAA2A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */,
+				81E4C5BB2ACD535C00BEAA2A /* BearAppSyncTests.xctest */,
+				81E4C5C52ACD535C00BEAA2A /* BearAppSyncUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81E4C5AC2ACD535A00BEAA2A /* BearAppSync */ = {
+			isa = PBXGroup;
+			children = (
+				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
+				81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */,
+				81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */,
+				81E4C5B62ACD535B00BEAA2A /* BearAppSync.entitlements */,
+				81E4C5B32ACD535B00BEAA2A /* Preview Content */,
+			);
+			path = BearAppSync;
+			sourceTree = "<group>";
+		};
+		81E4C5B32ACD535B00BEAA2A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				81E4C5B42ACD535B00BEAA2A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		81E4C5BE2ACD535C00BEAA2A /* BearAppSyncTests */ = {
+			isa = PBXGroup;
+			children = (
+				81E4C5BF2ACD535C00BEAA2A /* BearAppSyncTests.swift */,
+			);
+			path = BearAppSyncTests;
+			sourceTree = "<group>";
+		};
+		81E4C5C82ACD535C00BEAA2A /* BearAppSyncUITests */ = {
+			isa = PBXGroup;
+			children = (
+				81E4C5C92ACD535C00BEAA2A /* BearAppSyncUITests.swift */,
+				81E4C5CB2ACD535C00BEAA2A /* BearAppSyncUITestsLaunchTests.swift */,
+			);
+			path = BearAppSyncUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		81E4C5A92ACD535A00BEAA2A /* BearAppSync */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81E4C5CF2ACD535C00BEAA2A /* Build configuration list for PBXNativeTarget "BearAppSync" */;
+			buildPhases = (
+				81E4C5A62ACD535A00BEAA2A /* Sources */,
+				81E4C5A72ACD535A00BEAA2A /* Frameworks */,
+				81E4C5A82ACD535A00BEAA2A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BearAppSync;
+			productName = BearAppSync;
+			productReference = 81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */;
+			productType = "com.apple.product-type.application";
+		};
+		81E4C5BA2ACD535C00BEAA2A /* BearAppSyncTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81E4C5D22ACD535C00BEAA2A /* Build configuration list for PBXNativeTarget "BearAppSyncTests" */;
+			buildPhases = (
+				81E4C5B72ACD535C00BEAA2A /* Sources */,
+				81E4C5B82ACD535C00BEAA2A /* Frameworks */,
+				81E4C5B92ACD535C00BEAA2A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81E4C5BD2ACD535C00BEAA2A /* PBXTargetDependency */,
+			);
+			name = BearAppSyncTests;
+			productName = BearAppSyncTests;
+			productReference = 81E4C5BB2ACD535C00BEAA2A /* BearAppSyncTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		81E4C5C42ACD535C00BEAA2A /* BearAppSyncUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81E4C5D52ACD535C00BEAA2A /* Build configuration list for PBXNativeTarget "BearAppSyncUITests" */;
+			buildPhases = (
+				81E4C5C12ACD535C00BEAA2A /* Sources */,
+				81E4C5C22ACD535C00BEAA2A /* Frameworks */,
+				81E4C5C32ACD535C00BEAA2A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81E4C5C72ACD535C00BEAA2A /* PBXTargetDependency */,
+			);
+			name = BearAppSyncUITests;
+			productName = BearAppSyncUITests;
+			productReference = 81E4C5C52ACD535C00BEAA2A /* BearAppSyncUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81E4C5A22ACD535A00BEAA2A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					81E4C5A92ACD535A00BEAA2A = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					81E4C5BA2ACD535C00BEAA2A = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 81E4C5A92ACD535A00BEAA2A;
+					};
+					81E4C5C42ACD535C00BEAA2A = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 81E4C5A92ACD535A00BEAA2A;
+					};
+				};
+			};
+			buildConfigurationList = 81E4C5A52ACD535A00BEAA2A /* Build configuration list for PBXProject "BearAppSync" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 81E4C5A12ACD535A00BEAA2A;
+			productRefGroup = 81E4C5AB2ACD535A00BEAA2A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				81E4C5A92ACD535A00BEAA2A /* BearAppSync */,
+				81E4C5BA2ACD535C00BEAA2A /* BearAppSyncTests */,
+				81E4C5C42ACD535C00BEAA2A /* BearAppSyncUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		81E4C5A82ACD535A00BEAA2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E4C5B52ACD535B00BEAA2A /* Preview Assets.xcassets in Resources */,
+				81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E4C5B92ACD535C00BEAA2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E4C5C32ACD535C00BEAA2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		81E4C5A62ACD535A00BEAA2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */,
+				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E4C5B72ACD535C00BEAA2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E4C5C02ACD535C00BEAA2A /* BearAppSyncTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E4C5C12ACD535C00BEAA2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E4C5CA2ACD535C00BEAA2A /* BearAppSyncUITests.swift in Sources */,
+				81E4C5CC2ACD535C00BEAA2A /* BearAppSyncUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		81E4C5BD2ACD535C00BEAA2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 81E4C5A92ACD535A00BEAA2A /* BearAppSync */;
+			targetProxy = 81E4C5BC2ACD535C00BEAA2A /* PBXContainerItemProxy */;
+		};
+		81E4C5C72ACD535C00BEAA2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 81E4C5A92ACD535A00BEAA2A /* BearAppSync */;
+			targetProxy = 81E4C5C62ACD535C00BEAA2A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		81E4C5CD2ACD535C00BEAA2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		81E4C5CE2ACD535C00BEAA2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		81E4C5D02ACD535C00BEAA2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BearAppSync/BearAppSync.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BearAppSync/Preview Content\"";
+				DEVELOPMENT_TEAM = 455K6552B4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		81E4C5D12ACD535C00BEAA2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BearAppSync/BearAppSync.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BearAppSync/Preview Content\"";
+				DEVELOPMENT_TEAM = 455K6552B4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		81E4C5D32ACD535C00BEAA2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 455K6552B4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSyncTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BearAppSync.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BearAppSync";
+			};
+			name = Debug;
+		};
+		81E4C5D42ACD535C00BEAA2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 455K6552B4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSyncTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BearAppSync.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BearAppSync";
+			};
+			name = Release;
+		};
+		81E4C5D62ACD535C00BEAA2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 455K6552B4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSyncUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = BearAppSync;
+			};
+			name = Debug;
+		};
+		81E4C5D72ACD535C00BEAA2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 455K6552B4;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSyncUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = BearAppSync;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		81E4C5A52ACD535A00BEAA2A /* Build configuration list for PBXProject "BearAppSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E4C5CD2ACD535C00BEAA2A /* Debug */,
+				81E4C5CE2ACD535C00BEAA2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81E4C5CF2ACD535C00BEAA2A /* Build configuration list for PBXNativeTarget "BearAppSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E4C5D02ACD535C00BEAA2A /* Debug */,
+				81E4C5D12ACD535C00BEAA2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81E4C5D22ACD535C00BEAA2A /* Build configuration list for PBXNativeTarget "BearAppSyncTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E4C5D32ACD535C00BEAA2A /* Debug */,
+				81E4C5D42ACD535C00BEAA2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81E4C5D52ACD535C00BEAA2A /* Build configuration list for PBXNativeTarget "BearAppSyncUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E4C5D62ACD535C00BEAA2A /* Debug */,
+				81E4C5D72ACD535C00BEAA2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 81E4C5A22ACD535A00BEAA2A /* Project object */;
+}
