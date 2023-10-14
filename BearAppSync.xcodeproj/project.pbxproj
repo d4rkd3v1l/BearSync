@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED632ACE01DE00D1BE24 /* Note.swift */; };
+		8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */; };
 		81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */; };
 		81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */; };
 		81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8176ED632ACE01DE00D1BE24 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPanelHelper.swift; sourceTree = "<group>"; };
 		81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BearAppSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncApp.swift; sourceTree = "<group>"; };
 		81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 			children = (
 				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
 				81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */,
+				8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */,
+				8176ED632ACE01DE00D1BE24 /* Note.swift */,
 				81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */,
 				81E4C5B62ACD535B00BEAA2A /* BearAppSync.entitlements */,
 				81E4C5B32ACD535B00BEAA2A /* Preview Content */,
@@ -261,6 +267,8 @@
 			files = (
 				81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
+				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,
+				8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,7 +443,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -462,7 +470,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
