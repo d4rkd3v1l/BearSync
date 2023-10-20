@@ -41,16 +41,18 @@ class OpenPanelHelper {
     private func open(at url: URL?, bookmark: String, kind: Kind) async throws -> URL {
         if let bookmarkData = UserDefaults.standard.data(forKey: bookmark) {
             var isStale = false
-            let bookmarkUrl = try! URL(resolvingBookmarkData: bookmarkData, options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &isStale);
+            let bookmarkUrl = try URL(resolvingBookmarkData: bookmarkData, options: [], relativeTo: nil, bookmarkDataIsStale: &isStale);
             
             if(!isStale) {
                 if(bookmarkUrl.startAccessingSecurityScopedResource()) {
                     defer { bookmarkUrl.stopAccessingSecurityScopedResource() }
                     return bookmarkUrl
                 } else {
+                    UserDefaults.standard.set(nil, forKey: bookmark)
                     throw Error.bookmarkNoAccess
                 }
             } else {
+                UserDefaults.standard.set(nil, forKey: bookmark)
                 throw Error.bookmarkStale
             }
         } else {
@@ -65,11 +67,11 @@ class OpenPanelHelper {
             let result = await openPanel.begin()
             guard result == .OK else { throw Error.openFailed }
             
-            let bookmarkData = try! openPanel.urls.first!.bookmarkData(options: [.withSecurityScope]) // .securityScopeAllowOnlyReadAccess
+            let bookmarkData = try openPanel.urls.first!.bookmarkData(options: []) // .securityScopeAllowOnlyReadAccess
             UserDefaults.standard.set(bookmarkData, forKey: bookmark)
             
             var isStale = false
-            let bookmarkUrl = try! URL(resolvingBookmarkData: bookmarkData, options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &isStale);
+            let bookmarkUrl = try URL(resolvingBookmarkData: bookmarkData, options: [], relativeTo: nil, bookmarkDataIsStale: &isStale);
             return bookmarkUrl
         }
     }

@@ -15,11 +15,16 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!")
-            Button("Test") {
+            Button("Export notes") {
                 Task {
-                    await test()
+                    await exportNotes()
                 }
             }
+            Button("Bla") {
+                bash(currentDirectory: URL(string: "file:///Users/1337-h4x0r/")!, "pwd")
+            }
+            
+            
         }
         .padding()
     }
@@ -30,18 +35,22 @@ struct ContentView: View {
 }
 
 @MainActor
-func test() async {
+func exportNotes() async {
     let bearDBFilePath = ("~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data/database.sqlite" as NSString).expandingTildeInPath
     
-    let openPanelHelper = OpenPanelHelper()
-    let url = try! await openPanelHelper.openFile(at: NSURL.fileURL(withPath: bearDBFilePath, isDirectory: false), bookmark: "bearDBFilePathBookmark")
-    await exportNotesFromDB(at: url.path(percentEncoded: false))
+    do {
+        let openPanelHelper = OpenPanelHelper()
+        let url = try await openPanelHelper.openFile(at: NSURL.fileURL(withPath: bearDBFilePath, isDirectory: false), bookmark: "bearDBFilePathBookmark")
+        try await exportNotesFromDB(at: url.path(percentEncoded: false))
+    } catch {
+        print("ERROR: \(error)")
+    }
 }
 
 private let tags = ["test", "test2"]
 
 @MainActor
-private func exportNotesFromDB(at path: String) async {
+private func exportNotesFromDB(at path: String) async throws {
     var db: OpaquePointer?
     defer { sqlite3_close(db) }
     
@@ -76,8 +85,60 @@ private func exportNotesFromDB(at path: String) async {
             print(note.title)
             
             let openPanelHelper = OpenPanelHelper()
-            let url = try! await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
-            try! note.write(to: url)
+            let url = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
+            try note.write(to: url)
         }
+        
+        let openPanelHelper = OpenPanelHelper()
+        let url = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
+        bash(currentDirectory: url, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
+        bash(currentDirectory: url, "git config pull.rebase false")
+        bash(currentDirectory: url, "git add . && git commit -m \"test\"")
+        bash(currentDirectory: url, "git pull")
+        bash(currentDirectory: url, "git push")
+        
+        let newData = try! String(contentsOf: url.appending(component: "99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47"))
+        let updateURL = URL(string: "bear://x-callback-url/add-text?text=\(newData)&id=99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47&mode=replace")!
+        NSWorkspace.shared.open(updateURL)
     }
 }
+
+@discardableResult
+func bash(currentDirectory: URL, _ args: String...) -> Int32 {
+    let task = Process()
+    task.launchPath = "/bin/bash"
+    task.arguments = ["-c"] + args
+    task.currentDirectoryURL = currentDirectory
+    
+    let standardPipe = Pipe()
+    task.standardOutput = standardPipe
+    standardPipe.fileHandleForReading.readabilityHandler = { pipe in
+        if let line = String(data: pipe.availableData, encoding: .utf8) {
+            // Update your view with the new text here
+            if line != "" {
+                print("STANDARD > \(line)")
+            }
+        } else {
+            print("Error decoding data: \(pipe.availableData)")
+        }
+    }
+    
+    let errorPipe = Pipe()
+    task.standardError = errorPipe
+    errorPipe.fileHandleForReading.readabilityHandler = { pipe in
+        if let line = String(data: pipe.availableData, encoding: .utf8) {
+            // Update your view with the new text here
+            if line != "" {
+                print("ERROR > \(line)")
+            }
+        } else {
+            print("Error decoding data: \(pipe.availableData)")
+        }
+    }
+
+    
+    try! task.run()
+    task.waitUntilExit()
+    return task.terminationStatus
+}
+
