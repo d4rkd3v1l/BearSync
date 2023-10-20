@@ -97,8 +97,10 @@ private func exportNotesFromDB(at path: String) async throws {
         bash(currentDirectory: url, "git pull")
         bash(currentDirectory: url, "git push")
         
-        let newData = try! String(contentsOf: url.appending(component: "99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47"))
-        let updateURL = URL(string: "bear://x-callback-url/add-text?text=\(newData)&id=99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47&mode=replace")!
+        let newData = try! String(contentsOf: url.appending(component: "99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47")).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+        print(newData)
+        let updateURL = URL(string: "bear://x-callback-url/add-text?text=\(newData)&id=99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47&mode=replace_all&open_note=false")!
+        print(updateURL)
         NSWorkspace.shared.open(updateURL)
     }
 }
