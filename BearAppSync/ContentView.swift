@@ -15,16 +15,11 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!")
-            Button("Export notes") {
+            Button("Sync") {
                 Task {
                     await exportNotes()
                 }
             }
-            Button("Bla") {
-                bash(currentDirectory: URL(string: "file:///Users/1337-h4x0r/")!, "pwd")
-            }
-            
-            
         }
         .padding()
     }
@@ -66,6 +61,13 @@ private func exportNotesFromDB(at path: String) async throws {
     let queryString = "SELECT ZUNIQUEIDENTIFIER, ZTITLE, ZTEXT FROM ZSFNOTE WHERE ZTRASHED = '0'"
     
     if sqlite3_prepare_v2(db, queryString, -1, &query, nil) == SQLITE_OK {
+        let openPanelHelper = OpenPanelHelper()
+        let gitRepoURL = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
+        let stateURL = gitRepoURL.appending(path: "state.json")
+        var state = (try? State.readState(from: stateURL)) ?? State()
+        let instanceId = InstanceId(uuidString: UserDefaults.standard.string(forKey: "instanceId") ?? InstanceId().uuidString) ?? InstanceId()
+        UserDefaults.standard.set(instanceId.uuidString, forKey: "instanceId")
+        
         while sqlite3_step(query) == SQLITE_ROW {
             let rawUuid = sqlite3_column_text(query, 0)
             let rawTitle = sqlite3_column_text(query, 1)
@@ -84,24 +86,46 @@ private func exportNotesFromDB(at path: String) async throws {
             // TODO: Write .md files!
             print(note.title)
             
-            let openPanelHelper = OpenPanelHelper()
-            let url = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
-            try note.write(to: url)
+            let fileId = state.fileId(for: note.uuid, in: instanceId) ?? state.addNote(with: note.uuid, for: instanceId)
+            
+            let filename = gitRepoURL.appending(component: fileId.uuidString)
+            try note.text.write(to: filename, atomically: true, encoding: .utf8)
         }
         
-        let openPanelHelper = OpenPanelHelper()
-        let url = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
-        bash(currentDirectory: url, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
-        bash(currentDirectory: url, "git config pull.rebase false")
-        bash(currentDirectory: url, "git add . && git commit -m \"test\"")
-        bash(currentDirectory: url, "git pull")
-        bash(currentDirectory: url, "git push")
+        try state.writeState(to: stateURL)
         
-        let newData = try! String(contentsOf: url.appending(component: "99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47")).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
-        print(newData)
-        let updateURL = URL(string: "bear://x-callback-url/add-text?text=\(newData)&id=99E0CB12-84E0-4A2B-A3F6-4F0F24C03A47&mode=replace_all&open_note=false")!
-        print(updateURL)
-        NSWorkspace.shared.open(updateURL)
+        bash(currentDirectory: gitRepoURL, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
+        bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
+        bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test\"")
+        bash(currentDirectory: gitRepoURL, "git pull")
+
+        state = (try? State.readState(from: stateURL)) ?? State()
+        
+        let files = try FileManager.default.contentsOfDirectory(at: gitRepoURL, includingPropertiesForKeys: nil)
+        for file in files {
+            if let fileId = FileId(uuidString: file.lastPathComponent) {
+                let newData = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString)).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+                // Update
+                if let noteId = state.noteId(for: fileId, in: instanceId) {
+                    let updateURL = URL(string: "bear://x-callback-url/add-text?id=\(noteId)&text=\(newData)&mode=replace_all&open_note=false")!
+                    NSWorkspace.shared.open(updateURL)
+                } else { // Create
+                    print("create new note, add reference to state!")
+//                    x-success=sourceapp://x-callback-url/acceptTranslation&
+//                       x-source=SourceApp&
+//                       x-error=sourceapp://x-callback-url/translationError&
+                    
+                    let updateURL = URL(string: "bear://x-callback-url/create?text=\(newData)&open_note=false&x-success=bearappsync://x-callback-url/createSuccess?fileId%3d\(fileId)&x-error=bearappsync://x-callback-url/createError?fileId%3d\(fileId)")!
+                    NSWorkspace.shared.open(updateURL)
+                }
+            }
+        }
+        
+        // AWAIT ALL X-CALLBACK-URL RESPONSES
+        
+        try state.writeState(to: stateURL)
+        bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
+        bash(currentDirectory: gitRepoURL, "git push")
     }
 }
 
