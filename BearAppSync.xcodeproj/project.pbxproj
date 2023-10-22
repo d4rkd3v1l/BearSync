@@ -10,6 +10,7 @@
 		8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED632ACE01DE00D1BE24 /* Note.swift */; };
 		8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */; };
 		81C679B12AE3BD2F00C24537 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* State.swift */; };
+		81C679B42AE4E33A00C24537 /* BearAppCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearAppCom.swift */; };
 		81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */; };
 		81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */; };
 		81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPanelHelper.swift; sourceTree = "<group>"; };
 		81C679B02AE3BD2F00C24537 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		81C679B22AE3DEBA00C24537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		81C679B32AE4E33A00C24537 /* BearAppCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppCom.swift; sourceTree = "<group>"; };
 		81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BearAppSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncApp.swift; sourceTree = "<group>"; };
 		81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				81C679B22AE3DEBA00C24537 /* Info.plist */,
 				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
 				81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */,
+				81C679B32AE4E33A00C24537 /* BearAppCom.swift */,
 				8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */,
 				8176ED632ACE01DE00D1BE24 /* Note.swift */,
 				81C679B02AE3BD2F00C24537 /* State.swift */,
@@ -273,6 +276,7 @@
 				81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
 				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,
+				81C679B42AE4E33A00C24537 /* BearAppCom.swift in Sources */,
 				81C679B12AE3BD2F00C24537 /* State.swift in Sources */,
 				8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */,
 			);

@@ -20,6 +20,12 @@ struct ContentView: View {
                     await exportNotes()
                 }
             }
+            Button("Search") {
+                Task {
+                    let result = await BearAppCom.shared.search(tag: "test")
+                    print(result)
+                }
+            }
         }
         .padding()
     }
@@ -96,6 +102,7 @@ private func exportNotesFromDB(at path: String) async throws {
         
         bash(currentDirectory: gitRepoURL, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
         bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
+        bash(currentDirectory: gitRepoURL, "git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
         bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test\"")
         bash(currentDirectory: gitRepoURL, "git pull")
 
@@ -104,25 +111,20 @@ private func exportNotesFromDB(at path: String) async throws {
         let files = try FileManager.default.contentsOfDirectory(at: gitRepoURL, includingPropertiesForKeys: nil)
         for file in files {
             if let fileId = FileId(uuidString: file.lastPathComponent) {
-                let newData = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString)).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+                let text = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString)).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
                 // Update
                 if let noteId = state.noteId(for: fileId, in: instanceId) {
-                    let updateURL = URL(string: "bear://x-callback-url/add-text?id=\(noteId)&text=\(newData)&mode=replace_all&open_note=false")!
+                    let updateURL = URL(string: "bear://x-callback-url/add-text?id=\(noteId)&text=\(text)&mode=replace_all&open_note=false")!
                     NSWorkspace.shared.open(updateURL)
                 } else { // Create
-                    print("create new note, add reference to state!")
-//                    x-success=sourceapp://x-callback-url/acceptTranslation&
-//                       x-source=SourceApp&
-//                       x-error=sourceapp://x-callback-url/translationError&
-                    
-                    let updateURL = URL(string: "bear://x-callback-url/create?text=\(newData)&open_note=false&x-success=bearappsync://x-callback-url/createSuccess?fileId%3d\(fileId)&x-error=bearappsync://x-callback-url/createError?fileId%3d\(fileId)")!
-                    NSWorkspace.shared.open(updateURL)
+                    let noteId = try await BearAppCom.shared.create(with: text, for: fileId)
+                    if !state.addReference(to: fileId, noteId: noteId, instanceId: instanceId) {
+                        fatalError("Could not add reference to note!")
+                    }
                 }
             }
         }
-        
-        // AWAIT ALL X-CALLBACK-URL RESPONSES
-        
+    
         try state.writeState(to: stateURL)
         bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
         bash(currentDirectory: gitRepoURL, "git push")

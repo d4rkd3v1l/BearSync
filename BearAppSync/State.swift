@@ -14,7 +14,7 @@ typealias FileId = UUID
 struct State: Codable {
     struct Note: Codable {
         let fileId: FileId
-        let references: [InstanceId: NoteId]
+        var references: [InstanceId: NoteId]
     }
     
     var notes: [Note] = []
@@ -31,13 +31,28 @@ struct State: Codable {
         })?.fileId
     }
     
+    // New note created locally
     mutating func addNote(with noteId: NoteId, for instanceId: InstanceId) -> FileId {
         let note = Note(fileId: FileId(), references: [instanceId: noteId])
         notes.append(note)
         return note.fileId
     }
     
-    mutating func addReference() {}
+    // New note from remote
+    @discardableResult
+    mutating func addReference(to fileId: FileId, noteId: NoteId, instanceId: InstanceId) -> Bool {
+        for (index, note) in notes.enumerated() {
+            if note.fileId == fileId {
+                var note = note
+                note.references[instanceId] = noteId
+                notes[index] = note
+                break
+            }
+        }
+        
+        return true
+    }
+    
     mutating func removeReference() {}
     
     static func readState(from url: URL) throws -> Self {
