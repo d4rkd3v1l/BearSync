@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import SQLite3
+
+private let tags = ["test", "test2"]
 
 struct ContentView: View {
     var body: some View {
@@ -17,13 +18,16 @@ struct ContentView: View {
             Text("Hello, world!")
             Button("Sync") {
                 Task {
-                    await exportNotes()
+                    try await synchronize()
                 }
             }
             Button("Search") {
                 Task {
-                    let result = await BearAppCom.shared.search(tag: "test")
-                    print(result)
+                    let search = await BearAppCom.shared.search(tag: "test")
+                    print(search)
+                    let note = await BearAppCom.shared.openNote(search.first!)
+                    print(note.id)
+                    print(note.text)
                 }
             }
         }
@@ -36,99 +40,57 @@ struct ContentView: View {
 }
 
 @MainActor
-func exportNotes() async {
-    let bearDBFilePath = ("~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data/database.sqlite" as NSString).expandingTildeInPath
+func synchronize() async throws {
+    let openPanelHelper = OpenPanelHelper()
+    let gitRepoURL = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
+    let stateURL = gitRepoURL.appending(path: "state.json")
+    var state = (try? State.readState(from: stateURL)) ?? State()
+    let instanceId = InstanceId(uuidString: UserDefaults.standard.string(forKey: "instanceId") ?? InstanceId().uuidString) ?? InstanceId()
+    UserDefaults.standard.set(instanceId.uuidString, forKey: "instanceId")
     
-    do {
-        let openPanelHelper = OpenPanelHelper()
-        let url = try await openPanelHelper.openFile(at: NSURL.fileURL(withPath: bearDBFilePath, isDirectory: false), bookmark: "bearDBFilePathBookmark")
-        try await exportNotesFromDB(at: url.path(percentEncoded: false))
-    } catch {
-        print("ERROR: \(error)")
-    }
-}
-
-private let tags = ["test", "test2"]
-
-@MainActor
-private func exportNotesFromDB(at path: String) async throws {
-    var db: OpaquePointer?
-    defer { sqlite3_close(db) }
-    
-    guard sqlite3_open(path, &db) == SQLITE_OK else {
-        print("Error opening database.")
-        return
-    }
-    
-    print("Database opened.")
-
-    var query: OpaquePointer?
-    defer { sqlite3_finalize(query) }
-    let queryString = "SELECT ZUNIQUEIDENTIFIER, ZTITLE, ZTEXT FROM ZSFNOTE WHERE ZTRASHED = '0'"
-    
-    if sqlite3_prepare_v2(db, queryString, -1, &query, nil) == SQLITE_OK {
-        let openPanelHelper = OpenPanelHelper()
-        let gitRepoURL = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
-        let stateURL = gitRepoURL.appending(path: "state.json")
-        var state = (try? State.readState(from: stateURL)) ?? State()
-        let instanceId = InstanceId(uuidString: UserDefaults.standard.string(forKey: "instanceId") ?? InstanceId().uuidString) ?? InstanceId()
-        UserDefaults.standard.set(instanceId.uuidString, forKey: "instanceId")
+    for tag in tags {
+        let noteIds = await BearAppCom.shared.search(tag: tag)
         
-        while sqlite3_step(query) == SQLITE_ROW {
-            let rawUuid = sqlite3_column_text(query, 0)
-            let rawTitle = sqlite3_column_text(query, 1)
-            let rawText = sqlite3_column_text(query, 2)
-            
-            // Note: Encrypted (password protected) notes don't have `ZTEXT` property set, and anyway we don't want to export empty notes -> skip them.
-            guard let rawUuid, let rawTitle, let rawText else {
-                continue
-            }
-            
-            let note = Note(rawUuid: rawUuid, rawTitle: rawTitle, rawText: rawText)
-            guard note.tags.contains(where: { tags.contains($0) }) else {
-                continue
-            }
-            
-            // TODO: Write .md files!
-            print(note.title)
-            
-            let fileId = state.fileId(for: note.uuid, in: instanceId) ?? state.addNote(with: note.uuid, for: instanceId)
+        for noteId in noteIds {
+            let note = await BearAppCom.shared.openNote(noteId)
+            let fileId = state.fileId(for: note.id, in: instanceId) ?? state.addNote(with: note.id, for: instanceId)
             
             let filename = gitRepoURL.appending(component: fileId.uuidString)
             try note.text.write(to: filename, atomically: true, encoding: .utf8)
+            break // Why is this needed?!
         }
-        
-        try state.writeState(to: stateURL)
-        
-        bash(currentDirectory: gitRepoURL, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
-        bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
-        bash(currentDirectory: gitRepoURL, "git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
-        bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test\"")
-        bash(currentDirectory: gitRepoURL, "git pull")
+        break // Why is this needed?!
+    }
+    
+    try state.writeState(to: stateURL)
+    
+    bash(currentDirectory: gitRepoURL, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
+    bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
+    bash(currentDirectory: gitRepoURL, "git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
+    bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test\"")
+    bash(currentDirectory: gitRepoURL, "git pull")
 
-        state = (try? State.readState(from: stateURL)) ?? State()
-        
-        let files = try FileManager.default.contentsOfDirectory(at: gitRepoURL, includingPropertiesForKeys: nil)
-        for file in files {
-            if let fileId = FileId(uuidString: file.lastPathComponent) {
-                let text = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString)).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
-                // Update
-                if let noteId = state.noteId(for: fileId, in: instanceId) {
-                    let updateURL = URL(string: "bear://x-callback-url/add-text?id=\(noteId)&text=\(text)&mode=replace_all&open_note=false")!
-                    NSWorkspace.shared.open(updateURL)
-                } else { // Create
-                    let noteId = try await BearAppCom.shared.create(with: text, for: fileId)
-                    if !state.addReference(to: fileId, noteId: noteId, instanceId: instanceId) {
-                        fatalError("Could not add reference to note!")
-                    }
+    state = (try? State.readState(from: stateURL)) ?? State()
+    
+    let files = try FileManager.default.contentsOfDirectory(at: gitRepoURL, includingPropertiesForKeys: nil)
+    for file in files {
+        if let fileId = FileId(uuidString: file.lastPathComponent) {
+            let text = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString)).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+            // Update
+            if let noteId = state.noteId(for: fileId, in: instanceId) {
+                _ = try await BearAppCom.shared.addText(text, to: noteId)
+            } else { // Create
+                let noteId = try await BearAppCom.shared.create(with: text, for: fileId)
+                if !state.addReference(to: fileId, noteId: noteId, instanceId: instanceId) {
+                    fatalError("Could not add reference to note!")
                 }
             }
         }
-    
-        try state.writeState(to: stateURL)
-        bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
-        bash(currentDirectory: gitRepoURL, "git push")
     }
+
+    try state.writeState(to: stateURL)
+    bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
+    bash(currentDirectory: gitRepoURL, "git push")
 }
 
 @discardableResult

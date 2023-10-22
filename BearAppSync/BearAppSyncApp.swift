@@ -14,7 +14,9 @@ enum Status: String {
 
 enum Action: String {
     case search
+    case openNote = "open-note"
     case create
+    case addText = "add-text"
 }
 
 @main
@@ -40,6 +42,14 @@ struct BearAppSyncApp: App {
                         let notification = Notification(name: Notification.Name(Action.search.rawValue), object: nil, userInfo: userInfo)
                         NotificationCenter.default.post(notification)
                         
+                    case .openNote:
+                        guard let noteId = components.queryItems?["noteId"],
+                              let note = components.queryItems?["note"] else { fatalError("Not all needed parameters could be resolved.") }
+                        
+                        let userInfo = ["noteId": noteId, "note": note]
+                        let notification = Notification(name: Notification.Name(Action.openNote.rawValue), object: nil, userInfo: userInfo)
+                        NotificationCenter.default.post(notification)
+                        
                     case .create:
                         switch status {
                         case .success:
@@ -48,6 +58,19 @@ struct BearAppSyncApp: App {
                             
                             let userInfo = ["fileId": fileId, "identifier": identifier]
                             let notification = Notification(name: Notification.Name(Action.create.rawValue), object: nil, userInfo: userInfo)
+                            NotificationCenter.default.post(notification)
+                            
+                        case .error:
+                            fatalError("No error handling yet! TODO! \(url)")
+                        }
+                        
+                    case .addText:
+                        switch status {
+                        case .success:
+                            guard let noteId = components.queryItems?["noteId"] else { fatalError("Not all needed parameters could be resolved.") }
+                            
+                            let userInfo = ["noteId": noteId]
+                            let notification = Notification(name: Notification.Name(Action.addText.rawValue), object: nil, userInfo: userInfo)
                             NotificationCenter.default.post(notification)
                             
                         case .error:

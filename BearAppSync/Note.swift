@@ -9,8 +9,7 @@ import Foundation
 import RegexBuilder
 
 struct Note {
-    let uuid: String
-    let title: String
+    let id: String
     let text: String
     
     var tags: [String] {
@@ -44,14 +43,13 @@ struct Note {
 }
 
 extension Note {
-    init(rawUuid: UnsafePointer<UInt8>, rawTitle: UnsafePointer<UInt8>, rawText: UnsafePointer<UInt8>) {
-        uuid = String(cString: rawUuid)
-        title = String(cString: rawTitle)
+    init(rawUuid: UnsafePointer<UInt8>, rawText: UnsafePointer<UInt8>) {
+        id = String(cString: rawUuid)
         text = String(cString: rawText)
     }
     
     func write(to baseURL: URL) throws {
-        let filename = baseURL.appending(component: uuid)
+        let filename = baseURL.appending(component: id)
         try text.write(to: filename, atomically: true, encoding: .utf8)
     }
 }
