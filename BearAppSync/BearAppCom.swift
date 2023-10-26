@@ -18,15 +18,15 @@ struct SearchNote: Decodable {
 
 class BearAppCom {
     static let shared = BearAppCom()
-    
+
     // TODO: Use AsyncSequence here like notifications, and handle url parsing here instead of BearAppSyncApp.swift
     // https://www.avanderlee.com/concurrency/asyncsequence/
 //    func handleURL(_ url: URL) {
-//        
+//
 //    }
-    
+
     func search(tag: String) async -> [NoteId] {
-        let url = URL(string: "bear://x-callback-url/search?token=\(bearAPIToken)&tag=\(tag)&show_window=no&x-success=bearappsync://x-callback-url/search?status%3dsuccess%26tag%3d\(tag)")!
+        let url = URL(string: "bear://x-callback-url/search?token=\(bearAPIToken)&tag=\(tag)&show_window=no&x-success=bearappsync://x-callback-url/search?status%3dsuccess%26tag%3d\(tag)&x-error=bearappsync://x-callback-url/search?status%3derror%26tag%3d\(tag)")!
         NSWorkspace.shared.open(url)
         
         let notifications = NotificationCenter.default.notifications(named: Notification.Name(Action.search.rawValue))
@@ -43,7 +43,7 @@ class BearAppCom {
     
     // TODO: Ignore trashed notes!
     func openNote(_ noteId: NoteId) async -> Note {
-        let url = URL(string: "bear://x-callback-url/open-note?id=\(noteId)&exclude_trashed=yes&open_note=no&show_window=no&x-success=bearappsync://x-callback-url/open-note?status%3dsuccess%26noteId%3d\(noteId)")!
+        let url = URL(string: "bear://x-callback-url/open-note?id=\(noteId)&exclude_trashed=yes&open_note=no&show_window=no&x-success=bearappsync://x-callback-url/open-note?status%3dsuccess%26noteId%3d\(noteId)&x-error=bearappsync://x-callback-url/open-note?status%3derror%26noteId%3d\(noteId)")!
         NSWorkspace.shared.open(url)
 
         let notifications = NotificationCenter.default.notifications(named: Notification.Name(Action.openNote.rawValue))

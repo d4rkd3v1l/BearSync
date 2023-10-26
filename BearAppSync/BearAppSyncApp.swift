@@ -33,22 +33,38 @@ struct BearAppSyncApp: App {
                     
                     switch action {
                     case .search:
-                        guard let tag = components.queryItems?["tag"],
-                              let notes = components.queryItems?["notes"] else { fatalError("Not all needed parameters could be resolved.") }
-                        
-                        let searchNotes = try! JSONDecoder().decode([SearchNote].self, from: notes.data(using: .utf8)!)
-                        
-                        let userInfo = ["tag": tag, "notes": searchNotes as Any]
-                        let notification = Notification(name: Notification.Name(Action.search.rawValue), object: nil, userInfo: userInfo)
-                        NotificationCenter.default.post(notification)
+                        switch status {
+                        case .success:
+                            guard let tag = components.queryItems?["tag"],
+                                  let notes = components.queryItems?["notes"] else { fatalError("Not all needed parameters could be resolved.") }
+                            
+                            let searchNotes = try! JSONDecoder().decode([SearchNote].self, from: notes.data(using: .utf8)!)
+                            
+                            let userInfo = ["tag": tag, "notes": searchNotes as Any]
+                            let notification = Notification(name: Notification.Name(Action.search.rawValue), object: nil, userInfo: userInfo)
+                            NotificationCenter.default.post(notification)
+                            
+                        case .error:
+                            guard let tag = components.queryItems?["tag"] else { fatalError("Not all needed parameters could be resolved.") }
+                            
+                            let userInfo = ["tag": tag, "notes": [SearchNote]() as Any]
+                            let notification = Notification(name: Notification.Name(Action.search.rawValue), object: nil, userInfo: userInfo)
+                            NotificationCenter.default.post(notification)
+                        }
                         
                     case .openNote:
-                        guard let noteId = components.queryItems?["noteId"],
-                              let note = components.queryItems?["note"] else { fatalError("Not all needed parameters could be resolved.") }
-                        
-                        let userInfo = ["noteId": noteId, "note": note]
-                        let notification = Notification(name: Notification.Name(Action.openNote.rawValue), object: nil, userInfo: userInfo)
-                        NotificationCenter.default.post(notification)
+                        switch status {
+                        case .success:
+                            guard let noteId = components.queryItems?["noteId"],
+                                  let note = components.queryItems?["note"] else { fatalError("Not all needed parameters could be resolved.") }
+                            
+                            let userInfo = ["noteId": noteId, "note": note]
+                            let notification = Notification(name: Notification.Name(Action.openNote.rawValue), object: nil, userInfo: userInfo)
+                            NotificationCenter.default.post(notification)
+                            
+                        case .error:
+                            fatalError("No error handling yet! TODO! \(url)")
+                        }
                         
                     case .create:
                         switch status {

@@ -21,15 +21,6 @@ struct ContentView: View {
                     try await synchronize()
                 }
             }
-            Button("Search") {
-                Task {
-                    let search = await BearAppCom.shared.search(tag: "test")
-                    print(search)
-                    let note = await BearAppCom.shared.openNote(search.first!)
-                    print(note.id)
-                    print(note.text)
-                }
-            }
         }
         .padding()
     }
@@ -57,9 +48,7 @@ func synchronize() async throws {
             
             let filename = gitRepoURL.appending(component: fileId.uuidString)
             try note.text.write(to: filename, atomically: true, encoding: .utf8)
-            break // Why is this needed?!
         }
-        break // Why is this needed?!
     }
     
     try state.writeState(to: stateURL)
