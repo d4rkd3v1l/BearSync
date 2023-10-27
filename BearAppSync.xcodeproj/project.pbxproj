@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED632ACE01DE00D1BE24 /* Note.swift */; };
 		8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */; };
+		818037B62AEBAE7C00D3A37B /* SystemCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037B52AEBAE7C00D3A37B /* SystemCom.swift */; };
 		81C679B12AE3BD2F00C24537 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* State.swift */; };
 		81C679B42AE4E33A00C24537 /* BearAppCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearAppCom.swift */; };
 		81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		8176ED632ACE01DE00D1BE24 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPanelHelper.swift; sourceTree = "<group>"; };
+		818037B52AEBAE7C00D3A37B /* SystemCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCom.swift; sourceTree = "<group>"; };
 		81C679B02AE3BD2F00C24537 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		81C679B22AE3DEBA00C24537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C679B32AE4E33A00C24537 /* BearAppCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppCom.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				81C679B22AE3DEBA00C24537 /* Info.plist */,
 				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
 				81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */,
+				818037B52AEBAE7C00D3A37B /* SystemCom.swift */,
 				81C679B32AE4E33A00C24537 /* BearAppCom.swift */,
 				8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */,
 				8176ED632ACE01DE00D1BE24 /* Note.swift */,
@@ -273,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				818037B62AEBAE7C00D3A37B /* SystemCom.swift in Sources */,
 				81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
 				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,

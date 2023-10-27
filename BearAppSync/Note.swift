@@ -42,14 +42,23 @@ struct Note {
     }
 }
 
-extension Note {
-    init(rawUuid: UnsafePointer<UInt8>, rawText: UnsafePointer<UInt8>) {
-        id = String(cString: rawUuid)
-        text = String(cString: rawText)
-    }
-    
+extension Note {    
     func write(to baseURL: URL) throws {
         let filename = baseURL.appending(component: id)
         try text.write(to: filename, atomically: true, encoding: .utf8)
+    }
+}
+
+import CryptoKit
+extension String {
+    var sha256: String? {
+        guard let data = self.data(using: .utf8) else { return nil }
+        
+        let digest = SHA256.hash(data: data)
+        let hashString = digest
+            .compactMap { String(format: "%02x", $0) }
+            .joined()
+        
+        return hashString
     }
 }

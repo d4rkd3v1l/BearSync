@@ -21,6 +21,15 @@ struct ContentView: View {
                     try await synchronize()
                 }
             }
+            
+            Button("Async Test") {
+                Task {
+                    for await count in Counter(limit: 5) {
+                        print(count)
+                    }
+                    print("Counter finished")
+                }
+            }
         }
         .padding()
     }
@@ -53,23 +62,32 @@ func synchronize() async throws {
     
     try state.writeState(to: stateURL)
     
-    bash(currentDirectory: gitRepoURL, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
-    bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
-    bash(currentDirectory: gitRepoURL, "git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
-    bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test\"")
-    bash(currentDirectory: gitRepoURL, "git pull")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git config user.email \"BearAppSync@d4Rk.com\" && git config user.name \"BearAppSync\"")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test\"")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git pull")
 
     state = (try? State.readState(from: stateURL)) ?? State()
     
     let files = try FileManager.default.contentsOfDirectory(at: gitRepoURL, includingPropertiesForKeys: nil)
     for file in files {
         if let fileId = FileId(uuidString: file.lastPathComponent) {
-            let text = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString)).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
-            // Update
+            let text = try String(contentsOf: gitRepoURL.appending(component: fileId.uuidString))
+            let textPercentEncoded = text.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+        
             if let noteId = state.noteId(for: fileId, in: instanceId) {
-                _ = try await BearAppCom.shared.addText(text, to: noteId)
+                let note = await BearAppCom.shared.openNote(noteId)
+                // Update
+                if note.text.sha256 != text.sha256 {
+                    print("Update \(fileId)")
+                    _ = try await BearAppCom.shared.addText(textPercentEncoded, to: noteId)
+                } else {
+                    print("Skip \(fileId)")
+                }
             } else { // Create
-                let noteId = try await BearAppCom.shared.create(with: text, for: fileId)
+                print("Create \(fileId)")
+                let noteId = try await BearAppCom.shared.create(with: textPercentEncoded, for: fileId)
                 if !state.addReference(to: fileId, noteId: noteId, instanceId: instanceId) {
                     fatalError("Could not add reference to note!")
                 }
@@ -78,46 +96,31 @@ func synchronize() async throws {
     }
 
     try state.writeState(to: stateURL)
-    bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
-    bash(currentDirectory: gitRepoURL, "git push")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
+    SystemCom.bash(currentDirectory: gitRepoURL, "git push")
 }
 
-@discardableResult
-func bash(currentDirectory: URL, _ args: String...) -> Int32 {
-    let task = Process()
-    task.launchPath = "/bin/bash"
-    task.arguments = ["-c"] + args
-    task.currentDirectoryURL = currentDirectory
-    
-    let standardPipe = Pipe()
-    task.standardOutput = standardPipe
-    standardPipe.fileHandleForReading.readabilityHandler = { pipe in
-        if let line = String(data: pipe.availableData, encoding: .utf8) {
-            // Update your view with the new text here
-            if line != "" {
-                print("STANDARD > \(line)")
-            }
-        } else {
-            print("Error decoding data: \(pipe.availableData)")
+struct Counter: AsyncSequence, AsyncIteratorProtocol {
+    typealias Element = Int
+
+    let limit: Int
+    var current = 1
+
+    mutating func next() async -> Int? {
+        guard !Task.isCancelled else {
+            return nil
         }
-    }
-    
-    let errorPipe = Pipe()
-    task.standardError = errorPipe
-    errorPipe.fileHandleForReading.readabilityHandler = { pipe in
-        if let line = String(data: pipe.availableData, encoding: .utf8) {
-            // Update your view with the new text here
-            if line != "" {
-                print("ERROR > \(line)")
-            }
-        } else {
-            print("Error decoding data: \(pipe.availableData)")
+
+        guard current <= limit else {
+            return nil
         }
+
+        let result = current
+        current += 1
+        return result
     }
 
-    
-    try! task.run()
-    task.waitUntilExit()
-    return task.terminationStatus
+    func makeAsyncIterator() -> Counter {
+        self
+    }
 }
-

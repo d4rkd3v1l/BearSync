@@ -26,6 +26,7 @@ struct BearAppSyncApp: App {
             ContentView()
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"]) // activate existing window if exists
                 .onOpenURL(perform: { url in
+                    BearAppCom.shared.handleURL(url)
                     guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
                           let action = Action(rawValue: url.lastPathComponent),
                           let rawStatus = components.queryItems?["status"],
