@@ -6,33 +6,111 @@
 //
 
 import SwiftUI
+import Combine
 
-struct SearchNote: Decodable {
+enum Status: String {
+    case success
+    case error
+}
+
+enum Action: String {
+    case search
+    case openNote = "open-note"
+    case create
+    case addText = "add-text"
+}
+
+enum BearAppComResult {
+    case search(SearchResult?)
+    case openNote(OpenNoteResult?)
+    case create(CreateResult?)
+    case addText(AddTextResult?)
+}
+
+struct SearchResult {
+    struct Note: Decodable {
+        let title: String
+        let identifier: NoteId
+        let creationDate: String
+        let modificationDate: String
+        let tags: String
+        let pin: String
+    }
+    
+    let notes: [Note]
+    
+    init?(queryItems: [URLQueryItem]) {
+        guard let notes = queryItems["notes"],
+              let data = notes.data(using: .utf8),
+              let searchNotes = try? JSONDecoder().decode([SearchResult.Note].self, from: data) else { return nil }
+        
+        self.notes = searchNotes
+    }
+}
+
+struct OpenNoteResult {
+    let note: String
+    let identifier: NoteId
     let title: String
-    let identifier: String
-    let creationDate: String
-    let modificationDate: String
     let tags: String
-    let pin: String
+    let isTrashed: String
+    let modificationDate: String
+    let creationDate: String
+    
+    init?(queryItems: [URLQueryItem]) {
+        guard let note = queryItems["note"],
+              let identifier = queryItems["identifier"],
+              let title = queryItems["title"],
+              let tags = queryItems["tags"],
+              let isTrashed = queryItems["is_trashed"],
+              let modificationDate = queryItems["modificationDate"],
+              let creationDate = queryItems["creationDate"] else { return nil }
+        
+        self.note = note
+        self.identifier = identifier
+        self.title = title
+        self.tags = tags
+        self.isTrashed = isTrashed
+        self.modificationDate = modificationDate
+        self.creationDate = creationDate
+    }
+}
+
+struct CreateResult {
+    let identifier: NoteId
+    let title: String
+    
+    init?(queryItems: [URLQueryItem]) {
+        guard let identifier = queryItems["identifier"],
+              let title = queryItems["title"] else { return nil }
+        
+        self.identifier = identifier
+        self.title = title
+    }
+}
+
+struct AddTextResult {
+    let note: String
+    let title: String
+    
+    init?(queryItems: [URLQueryItem]) {
+        guard let note = queryItems["note"],
+              let title = queryItems["title"] else { return nil }
+        
+        self.note = note
+        self.title = title
+    }
 }
 
 class BearAppCom {
     static let shared = BearAppCom()
-
-    // TODO: Use AsyncSequence here like notifications, and handle url parsing here instead of BearAppSyncApp.swift
-    // https://www.avanderlee.com/concurrency/asyncsequence/
-    func handleURL(_ url: URL) {
-        
-    }
     
-    func bla(_ url: (URL) -> Void) {
-        
-    }
-    
-    func download() -> AsyncStream<URL> {
-        return AsyncStream { continuation in
-            bla() { url in
-                continuation.yield(url)
+    private let resultsSubject = PassthroughSubject<BearAppComResult, Never>()
+    private var results: AsyncStream<BearAppComResult> {
+        AsyncStream(bufferingPolicy: .bufferingOldest(0)) { continuation in
+            let cancellable = self.resultsSubject.sink { continuation.yield($0) }
+            continuation.onTermination = { continuation in
+                cancellable.cancel()
             }
         }
     }

@@ -21,15 +21,6 @@ struct ContentView: View {
                     try await synchronize()
                 }
             }
-            
-            Button("Async Test") {
-                Task {
-                    for await count in Counter(limit: 5) {
-                        print(count)
-                    }
-                    print("Counter finished")
-                }
-            }
         }
         .padding()
     }
@@ -49,14 +40,14 @@ func synchronize() async throws {
     UserDefaults.standard.set(instanceId.uuidString, forKey: "instanceId")
     
     for tag in tags {
-        let noteIds = await BearAppCom.shared.search(tag: tag)
+        let searchResult = await BearAppCom.shared.search(tag: tag)
         
-        for noteId in noteIds {
-            let note = await BearAppCom.shared.openNote(noteId)
-            let fileId = state.fileId(for: note.id, in: instanceId) ?? state.addNote(with: note.id, for: instanceId)
+        for noteId in searchResult?.notes.map({ $0.identifier }) ?? [] {
+            guard let openNoteResult = await BearAppCom.shared.openNote(noteId) else { continue }
+            let fileId = state.fileId(for: openNoteResult.identifier, in: instanceId) ?? state.addNote(with: openNoteResult.identifier, for: instanceId)
             
             let filename = gitRepoURL.appending(component: fileId.uuidString)
-            try note.text.write(to: filename, atomically: true, encoding: .utf8)
+            try openNoteResult.note.write(to: filename, atomically: true, encoding: .utf8)
         }
     }
     
@@ -77,9 +68,9 @@ func synchronize() async throws {
             let textPercentEncoded = text.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
         
             if let noteId = state.noteId(for: fileId, in: instanceId) {
-                let note = await BearAppCom.shared.openNote(noteId)
+                let openNoteResult = await BearAppCom.shared.openNote(noteId)
                 // Update
-                if note.text.sha256 != text.sha256 {
+                if openNoteResult?.note.sha256 != text.sha256 {
                     print("Update \(fileId)")
                     _ = try await BearAppCom.shared.addText(textPercentEncoded, to: noteId)
                 } else {
@@ -87,8 +78,8 @@ func synchronize() async throws {
                 }
             } else { // Create
                 print("Create \(fileId)")
-                let noteId = try await BearAppCom.shared.create(with: textPercentEncoded, for: fileId)
-                if !state.addReference(to: fileId, noteId: noteId, instanceId: instanceId) {
+                guard let noteId = try await BearAppCom.shared.create(with: textPercentEncoded, for: fileId)?.identifier,
+                      state.addReference(to: fileId, noteId: noteId, instanceId: instanceId) else {
                     fatalError("Could not add reference to note!")
                 }
             }
@@ -98,29 +89,4 @@ func synchronize() async throws {
     try state.writeState(to: stateURL)
     SystemCom.bash(currentDirectory: gitRepoURL, "git add . && git commit -m \"test2\"")
     SystemCom.bash(currentDirectory: gitRepoURL, "git push")
-}
-
-struct Counter: AsyncSequence, AsyncIteratorProtocol {
-    typealias Element = Int
-
-    let limit: Int
-    var current = 1
-
-    mutating func next() async -> Int? {
-        guard !Task.isCancelled else {
-            return nil
-        }
-
-        guard current <= limit else {
-            return nil
-        }
-
-        let result = current
-        current += 1
-        return result
-    }
-
-    func makeAsyncIterator() -> Counter {
-        self
-    }
 }
