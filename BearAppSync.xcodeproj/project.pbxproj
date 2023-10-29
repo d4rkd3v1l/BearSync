@@ -10,8 +10,18 @@
 		8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED632ACE01DE00D1BE24 /* Note.swift */; };
 		8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */; };
 		818037B62AEBAE7C00D3A37B /* SystemCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037B52AEBAE7C00D3A37B /* SystemCom.swift */; };
-		81C679B12AE3BD2F00C24537 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* State.swift */; };
-		81C679B42AE4E33A00C24537 /* BearAppCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearAppCom.swift */; };
+		818037B82AEBB56F00D3A37B /* BearAppComTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037B72AEBB56F00D3A37B /* BearAppComTests.swift */; };
+		818037BC2AEEDE0300D3A37B /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037BB2AEEDE0300D3A37B /* Array+Extensions.swift */; };
+		818037BF2AEEE73300D3A37B /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037BE2AEEE73300D3A37B /* Response.swift */; };
+		818037C12AEEE75A00D3A37B /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037C02AEEE75A00D3A37B /* SearchResult.swift */; };
+		818037C32AEEE76E00D3A37B /* CreateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037C22AEEE76E00D3A37B /* CreateResult.swift */; };
+		818037C52AEEE77E00D3A37B /* OpenNoteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037C42AEEE77E00D3A37B /* OpenNoteResult.swift */; };
+		818037C72AEEE79700D3A37B /* AddTextResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037C62AEEE79700D3A37B /* AddTextResult.swift */; };
+		818037CB2AEEE80F00D3A37B /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037CA2AEEE80F00D3A37B /* Action.swift */; };
+		818037CD2AEEE84800D3A37B /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037CC2AEEE84800D3A37B /* ResultType.swift */; };
+		818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037CE2AEEE88B00D3A37B /* BearComError.swift */; };
+		81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* Mapping.swift */; };
+		81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearCom.swift */; };
 		81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */; };
 		81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */; };
 		81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */; };
@@ -42,9 +52,19 @@
 		8176ED632ACE01DE00D1BE24 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPanelHelper.swift; sourceTree = "<group>"; };
 		818037B52AEBAE7C00D3A37B /* SystemCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCom.swift; sourceTree = "<group>"; };
-		81C679B02AE3BD2F00C24537 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		818037B72AEBB56F00D3A37B /* BearAppComTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppComTests.swift; sourceTree = "<group>"; };
+		818037BB2AEEDE0300D3A37B /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		818037BE2AEEE73300D3A37B /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		818037C02AEEE75A00D3A37B /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		818037C22AEEE76E00D3A37B /* CreateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateResult.swift; sourceTree = "<group>"; };
+		818037C42AEEE77E00D3A37B /* OpenNoteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNoteResult.swift; sourceTree = "<group>"; };
+		818037C62AEEE79700D3A37B /* AddTextResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTextResult.swift; sourceTree = "<group>"; };
+		818037CA2AEEE80F00D3A37B /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		818037CC2AEEE84800D3A37B /* ResultType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultType.swift; sourceTree = "<group>"; };
+		818037CE2AEEE88B00D3A37B /* BearComError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearComError.swift; sourceTree = "<group>"; };
+		81C679B02AE3BD2F00C24537 /* Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapping.swift; sourceTree = "<group>"; };
 		81C679B22AE3DEBA00C24537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		81C679B32AE4E33A00C24537 /* BearAppCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppCom.swift; sourceTree = "<group>"; };
+		81C679B32AE4E33A00C24537 /* BearCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearCom.swift; sourceTree = "<group>"; };
 		81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BearAppSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncApp.swift; sourceTree = "<group>"; };
 		81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +103,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		818037BD2AEEE6FE00D3A37B /* BearCom */ = {
+			isa = PBXGroup;
+			children = (
+				818037C82AEEE7C300D3A37B /* Results */,
+				81C679B32AE4E33A00C24537 /* BearCom.swift */,
+				818037CE2AEEE88B00D3A37B /* BearComError.swift */,
+				818037CA2AEEE80F00D3A37B /* Action.swift */,
+				818037BE2AEEE73300D3A37B /* Response.swift */,
+			);
+			path = BearCom;
+			sourceTree = "<group>";
+		};
+		818037C82AEEE7C300D3A37B /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				818037C62AEEE79700D3A37B /* AddTextResult.swift */,
+				818037C22AEEE76E00D3A37B /* CreateResult.swift */,
+				818037C42AEEE77E00D3A37B /* OpenNoteResult.swift */,
+				818037C02AEEE75A00D3A37B /* SearchResult.swift */,
+				818037CC2AEEE84800D3A37B /* ResultType.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		818037C92AEEE7ED00D3A37B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				818037BB2AEEDE0300D3A37B /* Array+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		81E4C5A12ACD535A00BEAA2A = {
 			isa = PBXGroup;
 			children = (
@@ -107,13 +159,14 @@
 			isa = PBXGroup;
 			children = (
 				81C679B22AE3DEBA00C24537 /* Info.plist */,
+				818037BD2AEEE6FE00D3A37B /* BearCom */,
+				818037C92AEEE7ED00D3A37B /* Extensions */,
 				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
 				81E4C5AF2ACD535A00BEAA2A /* ContentView.swift */,
 				818037B52AEBAE7C00D3A37B /* SystemCom.swift */,
-				81C679B32AE4E33A00C24537 /* BearAppCom.swift */,
 				8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */,
 				8176ED632ACE01DE00D1BE24 /* Note.swift */,
-				81C679B02AE3BD2F00C24537 /* State.swift */,
+				81C679B02AE3BD2F00C24537 /* Mapping.swift */,
 				81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */,
 				81E4C5B62ACD535B00BEAA2A /* BearAppSync.entitlements */,
 				81E4C5B32ACD535B00BEAA2A /* Preview Content */,
@@ -133,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				81E4C5BF2ACD535C00BEAA2A /* BearAppSyncTests.swift */,
+				818037B72AEBB56F00D3A37B /* BearAppComTests.swift */,
 			);
 			path = BearAppSyncTests;
 			sourceTree = "<group>";
@@ -276,13 +330,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */,
+				818037BF2AEEE73300D3A37B /* Response.swift in Sources */,
 				818037B62AEBAE7C00D3A37B /* SystemCom.swift in Sources */,
+				818037C52AEEE77E00D3A37B /* OpenNoteResult.swift in Sources */,
+				818037C12AEEE75A00D3A37B /* SearchResult.swift in Sources */,
 				81E4C5B02ACD535A00BEAA2A /* ContentView.swift in Sources */,
+				818037C32AEEE76E00D3A37B /* CreateResult.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
 				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,
-				81C679B42AE4E33A00C24537 /* BearAppCom.swift in Sources */,
-				81C679B12AE3BD2F00C24537 /* State.swift in Sources */,
+				818037C72AEEE79700D3A37B /* AddTextResult.swift in Sources */,
+				81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */,
+				818037CD2AEEE84800D3A37B /* ResultType.swift in Sources */,
+				81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */,
+				818037CB2AEEE80F00D3A37B /* Action.swift in Sources */,
 				8176ED642ACE01DE00D1BE24 /* Note.swift in Sources */,
+				818037BC2AEEDE0300D3A37B /* Array+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81E4C5C02ACD535C00BEAA2A /* BearAppSyncTests.swift in Sources */,
+				818037B82AEBB56F00D3A37B /* BearAppComTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ typealias InstanceId = UUID
 typealias NoteId = String
 typealias FileId = UUID
 
-struct State: Codable {
+struct Mapping: Codable {
     struct Note: Codable {
         let fileId: FileId
         var references: [InstanceId: NoteId]
@@ -55,13 +55,13 @@ struct State: Codable {
     
     mutating func removeReference() {}
     
-    static func readState(from url: URL) throws -> Self {
+    static func load(from url: URL) throws -> Self {
         let data = try Data(contentsOf: url)
-        let state = try JSONDecoder().decode(State.self, from: data)
+        let state = try JSONDecoder().decode(Mapping.self, from: data)
         return state
     }
     
-    func writeState(to url: URL) throws {
+    func save(to url: URL) throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         let state = try encoder.encode(self)
