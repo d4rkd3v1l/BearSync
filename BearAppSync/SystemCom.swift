@@ -9,7 +9,10 @@ import Foundation
 
 class SystemCom {
     @discardableResult
-    static func bash(currentDirectory: URL, _ args: String...) -> Int32 {
+    static func bash(currentDirectory: URL, 
+                     standardOutput: ((String) -> Void)? = nil,
+                     standardError: ((String) -> Void)? = nil,
+                     _ args: String...) -> Int32 {
         let task = Process()
         task.launchPath = "/bin/bash"
         task.arguments = ["-c"] + args
@@ -21,7 +24,7 @@ class SystemCom {
             if let line = String(data: pipe.availableData, encoding: .utf8) {
                 // Update your view with the new text here
                 if line != "" {
-    //                print("STANDARD > \(line)")
+                    standardOutput?(line)
                 }
             } else {
                 print("Error decoding data: \(pipe.availableData)")
@@ -34,7 +37,7 @@ class SystemCom {
             if let line = String(data: pipe.availableData, encoding: .utf8) {
                 // Update your view with the new text here
                 if line != "" {
-    //                print("ERROR > \(line)")
+                    standardError?(line)
                 }
             } else {
                 print("Error decoding data: \(pipe.availableData)")

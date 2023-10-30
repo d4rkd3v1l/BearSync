@@ -8,16 +8,24 @@
 import Foundation
 
 typealias InstanceId = UUID
-typealias NoteId = String
+typealias NoteId = UUID
 typealias FileId = UUID
 
-struct Mapping: Codable {
-    struct Note: Codable {
+struct Mapping: Codable, Equatable {
+    struct Note: Codable, Equatable {
         let fileId: FileId
         var references: [InstanceId: NoteId]
     }
     
-    var notes: [Note] = []
+    private (set) var notes: [Note] = []
+    
+    // MARK: - Lifecycle
+    
+    init(notes: [Note] = []) {
+        self.notes = notes
+    }
+    
+    // MARK: - Modifications
     
     func noteId(for fileId: FileId, in instanceId: InstanceId) -> NoteId? {
         notes.first(where: { note in
@@ -46,14 +54,16 @@ struct Mapping: Codable {
                 var note = note
                 note.references[instanceId] = noteId
                 notes[index] = note
-                break
+                return true
             }
         }
         
-        return true
+        return false
     }
     
     mutating func removeReference() {}
+    
+    // MARK: - Persistence
     
     static func load(from url: URL) throws -> Self {
         let data = try Data(contentsOf: url)
