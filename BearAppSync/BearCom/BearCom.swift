@@ -16,7 +16,6 @@ protocol URLOpener {
 
 extension NSWorkspace: URLOpener {}
 
-
 class BearCom {
     
     // MARK: - Properties
@@ -44,8 +43,8 @@ class BearCom {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
               let action = Action(rawValue: url.lastPathComponent) else { return }
         
-        let bla = Response(action.responseType, queryItems: components.queryItems!)!
-        responseSubject.send(bla)
+        let response = Response(action.responseType, queryItems: components.queryItems!)!
+        responseSubject.send(response)
     }
     
     // MARK: - Actions
@@ -122,6 +121,26 @@ class BearCom {
                 switch response.result {
                 case .success(let result):
                     return result as! AddTextResult
+                    
+                case .failure(let error):
+                    throw error
+                }
+            }
+        }
+        
+        fatalError("Should never get here?!")
+    }
+    
+    func trash(noteId: NoteId) async throws -> TrashResult {
+        let requestId = UUID()
+        let url = URL(string: "bear://x-callback-url/trash?id=\(noteId)&show_window=no&x-success=bearappsync://x-callback-url/trash?requestId%3d\(requestId)&x-error=bearappsync://x-callback-url/trash?requestId%3d\(requestId)")!
+        urlOpener.open(url)
+        
+        for await response in responses {
+            if response.requestId == requestId {
+                switch response.result {
+                case .success(let result):
+                    return result as! TrashResult
                     
                 case .failure(let error):
                     throw error

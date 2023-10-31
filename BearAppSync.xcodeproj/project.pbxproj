@@ -25,6 +25,8 @@
 		81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearCom.swift */; };
 		81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4B2AEFB6220006283C /* MappingTests.swift */; };
 		81D47D4E2AEFE6BE0006283C /* SystemComTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4D2AEFE6BE0006283C /* SystemComTests.swift */; };
+		81D47D502AF0DDF30006283C /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4F2AF0DDF30006283C /* Synchronizer.swift */; };
+		81D47D522AF136A00006283C /* TrashResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D512AF136A00006283C /* TrashResult.swift */; };
 		81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */; };
 		81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */; };
 		81E4C5B52ACD535B00BEAA2A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B42ACD535B00BEAA2A /* Preview Assets.xcassets */; };
@@ -70,6 +72,8 @@
 		81C679B32AE4E33A00C24537 /* BearCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearCom.swift; sourceTree = "<group>"; };
 		81D47D4B2AEFB6220006283C /* MappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingTests.swift; sourceTree = "<group>"; };
 		81D47D4D2AEFE6BE0006283C /* SystemComTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemComTests.swift; sourceTree = "<group>"; };
+		81D47D4F2AF0DDF30006283C /* Synchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synchronizer.swift; sourceTree = "<group>"; };
+		81D47D512AF136A00006283C /* TrashResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashResult.swift; sourceTree = "<group>"; };
 		81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BearAppSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearAppSyncApp.swift; sourceTree = "<group>"; };
 		81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -124,8 +128,9 @@
 				818037C62AEEE79700D3A37B /* AddTextResult.swift */,
 				818037C22AEEE76E00D3A37B /* CreateResult.swift */,
 				818037C42AEEE77E00D3A37B /* OpenNoteResult.swift */,
-				818037C02AEEE75A00D3A37B /* SearchResult.swift */,
 				818037CC2AEEE84800D3A37B /* ResultType.swift */,
+				818037C02AEEE75A00D3A37B /* SearchResult.swift */,
+				81D47D512AF136A00006283C /* TrashResult.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 				818037BD2AEEE6FE00D3A37B /* BearCom */,
 				818037C92AEEE7ED00D3A37B /* Extensions */,
 				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
+				81D47D4F2AF0DDF30006283C /* Synchronizer.swift */,
 				818037B52AEBAE7C00D3A37B /* SystemCom.swift */,
 				8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */,
 				81C679B02AE3BD2F00C24537 /* Mapping.swift */,
@@ -337,6 +343,7 @@
 			files = (
 				818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */,
 				818037BF2AEEE73300D3A37B /* Response.swift in Sources */,
+				81D47D522AF136A00006283C /* TrashResult.swift in Sources */,
 				818037B62AEBAE7C00D3A37B /* SystemCom.swift in Sources */,
 				818037C52AEEE77E00D3A37B /* OpenNoteResult.swift in Sources */,
 				818037C12AEEE75A00D3A37B /* SearchResult.swift in Sources */,
@@ -346,6 +353,7 @@
 				818037C72AEEE79700D3A37B /* AddTextResult.swift in Sources */,
 				81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */,
 				818037CD2AEEE84800D3A37B /* ResultType.swift in Sources */,
+				81D47D502AF0DDF30006283C /* Synchronizer.swift in Sources */,
 				8184021E2AEFB37C00B79D1C /* String+Extensions.swift in Sources */,
 				81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */,
 				818037CB2AEEE80F00D3A37B /* Action.swift in Sources */,

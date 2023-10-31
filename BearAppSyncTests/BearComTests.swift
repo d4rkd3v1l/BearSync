@@ -57,6 +57,10 @@ final class BearComTests: XCTestCase {
         let addTextResult = try? await sut.addText("failure", to: UUID())
         XCTAssertNil(addTextResult)
     }
+    
+    func testTrash() async throws {
+        XCTFail("Not implemented")
+    }
 }
 
 // MARK: - MockURLOpener

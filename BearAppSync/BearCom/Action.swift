@@ -12,6 +12,7 @@ enum Action: String {
     case openNote = "open-note"
     case create
     case addText = "add-text"
+    case trash
     
     var responseType: ResultType.Type {
         switch self {
@@ -26,6 +27,9 @@ enum Action: String {
             
         case .addText:
             return AddTextResult.self
+            
+        case .trash:
+            return TrashResult.self
         }
     }
 }

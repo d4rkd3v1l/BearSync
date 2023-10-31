@@ -17,7 +17,9 @@ struct Response {
         
         self.requestId = requestId
         
-        if let result = T(queryItems: queryItems) {
+        if let error = BearAPIError(queryItems: queryItems) {
+            self.result = .failure(.apiError(error))
+        } else if let result = T(queryItems: queryItems) {
             self.result = .success(result)
         } else {
             self.result = .failure(.unknown)

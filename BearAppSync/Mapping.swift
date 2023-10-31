@@ -15,6 +15,7 @@ struct Mapping: Codable, Equatable {
     struct Note: Codable, Equatable {
         let fileId: FileId
         var references: [InstanceId: NoteId]
+//        var isDeleted: Bool = false
     }
     
     private (set) var notes: [Note] = []
@@ -46,6 +47,25 @@ struct Mapping: Codable, Equatable {
         return note.fileId
     }
     
+    mutating func removeNote(_ note: Note) {
+        notes.removeAll(where: { $0 == note })
+    }
+    
+//    // Note removed locally
+//    mutating func removeNote(with fileId: FileId, for instanceId: InstanceId) {
+//        for var note in notes {
+//            if note.fileId == fileId {
+//                note.references[instanceId] = nil
+//                
+//                if note.references.isEmpty {
+//                    notes.removeAll(where: { $0 == note })
+//                } else {
+//                    note.isDeleted = true
+//                }
+//            }
+//        }
+//    }
+    
     // New note from remote
     @discardableResult
     mutating func addReference(to fileId: FileId, noteId: NoteId, instanceId: InstanceId) -> Bool {
@@ -60,8 +80,6 @@ struct Mapping: Codable, Equatable {
         
         return false
     }
-    
-    mutating func removeReference() {}
     
     // MARK: - Persistence
     
