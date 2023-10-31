@@ -118,7 +118,6 @@ class Synchronizer {
                     print("Note was deleted locally... Removing it from repo \(note.fileId)")
                     let filename = baseURL.appending(component: note.fileId.uuidString)
                     try FileManager.default.removeItem(at: filename)
-//                    mapping.removeNote(with: note.fileId, for: instanceId)
                     mapping.removeNote(note)
                 } else {
                     print("Note still exists locally... Skipping \(note.fileId)")
@@ -133,11 +132,6 @@ class Synchronizer {
                                        with baseURL: URL,
                                        using mapping: inout Mapping) async throws {
         for note in mapping.notes {
-//            if note.isDeleted {
-//                print("Note was remotely deleted \(note.fileId)")
-//                mapping.removeNote(with: note.fileId, for: instanceId)
-//                // TODO: BearCom.trash
-//            } else 
             if let noteId = note.references[instanceId] {  // Update
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
                 let openNoteResult = try? await bearCom.openNote(noteId)

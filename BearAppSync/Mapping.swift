@@ -47,24 +47,10 @@ struct Mapping: Codable, Equatable {
         return note.fileId
     }
     
+    // Note removed locally
     mutating func removeNote(_ note: Note) {
         notes.removeAll(where: { $0 == note })
     }
-    
-//    // Note removed locally
-//    mutating func removeNote(with fileId: FileId, for instanceId: InstanceId) {
-//        for var note in notes {
-//            if note.fileId == fileId {
-//                note.references[instanceId] = nil
-//                
-//                if note.references.isEmpty {
-//                    notes.removeAll(where: { $0 == note })
-//                } else {
-//                    note.isDeleted = true
-//                }
-//            }
-//        }
-//    }
     
     // New note from remote
     @discardableResult
