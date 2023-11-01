@@ -9,13 +9,6 @@ import SwiftUI
 import Combine
 
 
-protocol URLOpener {
-    @discardableResult
-    func open(_ url: URL) -> Bool
-}
-
-extension NSWorkspace: URLOpener {}
-
 class BearCom {
     
     // MARK: - Properties
@@ -39,6 +32,7 @@ class BearCom {
         self.urlOpener = urlOpener
     }
     
+    /// This must be called from whereever you receive callback urls, e.g. from `AppDelegte`.
     func handleURL(_ url: URL) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
               let action = Action(rawValue: url.lastPathComponent) else { return }

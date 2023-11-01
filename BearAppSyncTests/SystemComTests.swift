@@ -9,9 +9,17 @@ import XCTest
 @testable import BearAppSync
 
 final class SystemComTests: XCTestCase {
-    func testSimpleCommand() throws {
+    private var systemCom: SystemCom!
+    
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        
         let url = URL(fileURLWithPath: NSTemporaryDirectory())
-        SystemCom.bash(currentDirectory: url, standardOutput: { output in
+        systemCom = SystemCom(currentDirectory: url)
+    }
+    
+    func testSimpleCommand() throws {
+        systemCom.bash(standardOutput: { output in
             XCTAssertEqual(output, "/Users/1337-h4x0r/Library/Containers/com.d4Rk.BearAppSync2/Data/tmp\n")
         }, standardError: { _ in
             XCTFail("No error expected.")
@@ -19,8 +27,7 @@ final class SystemComTests: XCTestCase {
     }
     
     func testInvalidCommand() throws {
-        let url = URL(fileURLWithPath: NSTemporaryDirectory())
-        SystemCom.bash(currentDirectory: url, standardOutput: { output in
+        systemCom.bash(standardOutput: { output in
             XCTFail("No standard output expected.")
         }, standardError: { error in
             XCTAssertEqual(error, "/bin/bash: invalid-command-that-does-not-exist: command not found\n")

@@ -20,8 +20,8 @@ final class BearComTests: XCTestCase {
     }
     
     func testSearchSuccess() async throws {
-        let searchResult = try? await sut.search(tag: "success")
-        XCTAssertEqual(try XCTUnwrap(searchResult).notes.count, 5)
+        let searchResult = try await sut.search(tag: "success")
+        XCTAssertEqual(searchResult.notes.count, 5)
     }
     
     func testSearchFailure() async throws {
@@ -30,8 +30,8 @@ final class BearComTests: XCTestCase {
     }
     
     func testOpenNoteSuccess() async throws {
-        let openNoteResult = try? await sut.openNote(UUID(uuidString: "13371337-1337-1337-1337-133713371337")!)
-        XCTAssertEqual(try XCTUnwrap(openNoteResult).identifier, UUID(uuidString: "2593B4B6-F3B8-45CA-A260-ABAB13E380E9")!)
+        let openNoteResult = try await sut.openNote(UUID(uuidString: "13371337-1337-1337-1337-133713371337")!)
+        XCTAssertEqual(openNoteResult.identifier, UUID(uuidString: "2593B4B6-F3B8-45CA-A260-ABAB13E380E9")!)
     }
     func testOpenNoteFailure() async throws {
         let openNoteResult = try? await sut.openNote(UUID(uuidString: "00000000-0000-0000-0000-000000000000")!)
@@ -39,8 +39,8 @@ final class BearComTests: XCTestCase {
     }
     
     func testCreateSuccess() async throws {
-        let createResult = try? await sut.create(with: "success")
-        XCTAssertEqual(try XCTUnwrap(createResult).identifier, UUID(uuidString: "6E06ACC8-E68F-4F5F-A21C-6A1448B75F2D")!)
+        let createResult = try await sut.create(with: "success")
+        XCTAssertEqual(createResult.identifier, UUID(uuidString: "6E06ACC8-E68F-4F5F-A21C-6A1448B75F2D")!)
     }
     
     func testCreateFailure() async throws {
@@ -49,8 +49,8 @@ final class BearComTests: XCTestCase {
     }
     
     func testAddTextSuccess() async throws {
-        let addTextResult = try? await sut.addText("success", to: UUID())
-        XCTAssertEqual(try XCTUnwrap(addTextResult).title, "Test2")
+        let addTextResult = try await sut.addText("success", to: UUID())
+        XCTAssertEqual(addTextResult.title, "Test2")
     }
     
     func testAddTextFailure() async throws {
@@ -58,8 +58,14 @@ final class BearComTests: XCTestCase {
         XCTAssertNil(addTextResult)
     }
     
-    func testTrash() async throws {
-        XCTFail("Not implemented")
+    func testTrashSuccess() async throws {
+        _ = try await sut.trash(noteId: UUID(uuidString: "13371337-1337-1337-1337-133713371337")!)
+        // Note: No assertion required, as not actual response data is returned and not throwing an error is therefore already considered "passed".
+    }
+    
+    func testTrashFailure() async throws {
+        let trashResult = try? await sut.openNote(UUID(uuidString: "00000000-0000-0000-0000-000000000000")!)
+        XCTAssertNil(trashResult)
     }
 }
 
@@ -105,6 +111,13 @@ class MockURLOpener: URLOpener {
                 response = URL(string: "bearappsync://x-callback-url/add-text?requestId=\(requestId)&title=Test2&note=%23%20Test2%0A%0A13451rq%0A%0A---%0A%23test2%0A&")!
             } else {
                 response = URL(string: "bearappsync://x-callback-url/add-text?requestId=\(requestId)&error-Code=1&errorMessage=Text%20provided%20empty&errorDomain=Text%20provided%20empty&")!
+            }
+            
+        case .trash:
+            if let id = urlComponents.queryItems?["id"], id == "13371337-1337-1337-1337-133713371337" {
+                response = URL(string:  "bearappsync://x-callback-url/trash?requestId=\(requestId)&")!
+            } else {
+                response = URL(string: "bearappsync://x-callback-url/trash?requestId=\(requestId)&error-Code=2&errorMessage=The%20note%20could%20not%20be%20found&errorDomain=The%20note%20could%20not%20be%20found&")!
             }
         }
         

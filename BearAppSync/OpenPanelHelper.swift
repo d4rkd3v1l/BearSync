@@ -9,6 +9,9 @@ import SwiftUI
 
 @MainActor
 class OpenPanelHelper {
+    
+    // MARK: - Types
+    
     enum Error: Swift.Error {
         case openFailed
         case bookmarkNoAccess
@@ -30,6 +33,8 @@ class OpenPanelHelper {
         }
     }
     
+    // MARK: - Public API
+    
     func openFile(at url: URL?, bookmark: String) async throws -> URL {
         try await open(at: url, bookmark: bookmark, kind: .file)
     }
@@ -37,6 +42,8 @@ class OpenPanelHelper {
     func openDirectory(at url: URL?, bookmark: String) async throws -> URL {
         try await open(at: url, bookmark: bookmark, kind: .directory)
     }
+    
+    // MARK: - Internals
     
     private func open(at url: URL?, bookmark: String, kind: Kind) async throws -> URL {
         if let bookmarkData = UserDefaults.standard.data(forKey: bookmark) {

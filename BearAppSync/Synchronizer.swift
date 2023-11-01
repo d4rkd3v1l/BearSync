@@ -14,7 +14,11 @@ enum SyncError: Error {
 }
 
 class Synchronizer {
+    
+    // MARK: - Properties
+    
     private let bearCom: BearCom
+    private var systemCom: SystemCom!
     private var syncInProgress = false
     
     // MARK: - Lifecycle
@@ -33,6 +37,7 @@ class Synchronizer {
         print("Starting sync...")
         let openPanelHelper = OpenPanelHelper()
         let gitRepoURL = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
+        systemCom = SystemCom(currentDirectory: gitRepoURL)
         let mappingURL = gitRepoURL.appending(path: "mapping.json")
         var mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
         let instanceId = InstanceId(uuidString: UserDefaults.standard.string(forKey: "instanceId") ?? InstanceId().uuidString) ?? InstanceId()
@@ -43,18 +48,14 @@ class Synchronizer {
         try await exportNotes(noteIds: bearNoteIds, for: instanceId, to: gitRepoURL, using: &mapping)
         
         print("Removing locally deleted notes...")
-        try removeNotes(excludedNoteIds: bearNoteIds, for: instanceId, from: gitRepoURL, using: &mapping)
+        try removeLocallyDeletedNotes(excludedNoteIds: bearNoteIds, for: instanceId, from: gitRepoURL, using: &mapping)
         
         try mapping.save(to: mappingURL)
         
         print("Fetching remote changes...")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git config user.name \"BearAppSync\"")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git config user.email \"no@mail.address\"")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git config pull.rebase false")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git add .")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git commit -m \"Updates from \(instanceId.uuidString)\"")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git pull")
+        gitConfigure()
+        gitCommit(message: "Updates from \(instanceId.uuidString)")
+        gitPull()
         
         mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
         
@@ -63,27 +64,40 @@ class Synchronizer {
         
         print("Removing remotely deleted notes...")
         bearNoteIds = try await noteIdsFromBear(for: tags)
-        for noteId in bearNoteIds {
-            if mapping.notes.contains(where: { $0.references.contains(where: { $0.value == noteId }) }) {
-                print("Note still exists remotely... Skipping \(noteId)")
-            } else {
-                print("Note was deleted remotely... Removing it locally \(noteId)")
-                _ = try await bearCom.trash(noteId: noteId)
-            }
-        }
+        try await removeRemotelyDeletedNotes(localNoteIds: bearNoteIds, using: mapping)
         
         try mapping.save(to: mappingURL)
         
-        print("Pushing notes to remote...")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git add .")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git commit -m \"Additional updates from \(instanceId.uuidString)\"")
-        SystemCom.bash(currentDirectory: gitRepoURL, "git push")
+        print("Pushing changes to remote...")
+        gitCommit(message: "Additional updates from \(instanceId.uuidString)")
+        gitPush()
         
         print("Done.")
         syncInProgress = false
     }
     
     // MARK: - Helper
+    
+    // MARK: Git
+    private func gitConfigure() {
+        systemCom.bash("git config user.name \"BearAppSync\"")
+        systemCom.bash("git config user.email \"no@mail.address\"")
+        systemCom.bash("git config pull.rebase false")
+        systemCom.bash("git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
+    }
+    
+    private func gitCommit(message: String) {
+        systemCom.bash("git add .")
+        systemCom.bash("git commit -m \"\(message)\"")
+    }
+    
+    private func gitPull() {
+        systemCom.bash("git pull")
+    }
+    
+    private func gitPush() {
+        systemCom.bash("git push")
+    }
     
     private func noteIdsFromBear(for tags: [String]) async throws -> [NoteId] {
         var allNoteIds: [NoteId] = []
@@ -95,6 +109,7 @@ class Synchronizer {
         return allNoteIds
     }
     
+    // MARK: Notes
     private func exportNotes(noteIds: [NoteId],
                              for instanceId: InstanceId,
                              to baseURL: URL,
@@ -108,10 +123,10 @@ class Synchronizer {
         }
     }
     
-    private func removeNotes(excludedNoteIds: [NoteId],
-                             for instanceId: InstanceId,
-                             from baseURL: URL,
-                             using mapping: inout Mapping) throws {
+    private func removeLocallyDeletedNotes(excludedNoteIds: [NoteId],
+                                           for instanceId: InstanceId,
+                                           from baseURL: URL,
+                                           using mapping: inout Mapping) throws {
         for note in mapping.notes {
             if let fileNoteId = note.references[instanceId] {
                 if !excludedNoteIds.contains(fileNoteId) {
@@ -148,6 +163,17 @@ class Synchronizer {
                       mapping.addReference(to: note.fileId, noteId: noteId, instanceId: instanceId) else {
                     fatalError("Could not add reference to note!")
                 }
+            }
+        }
+    }
+    
+    private func removeRemotelyDeletedNotes(localNoteIds: [NoteId], using mapping: Mapping) async throws {
+        for noteId in localNoteIds {
+            if mapping.notes.contains(where: { $0.references.contains(where: { $0.value == noteId }) }) {
+                print("Note still exists remotely... Skipping \(noteId)")
+            } else {
+                print("Note was deleted remotely... Removing it locally \(noteId)")
+                _ = try await bearCom.trash(noteId: noteId)
             }
         }
     }

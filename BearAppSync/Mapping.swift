@@ -12,11 +12,15 @@ typealias NoteId = UUID
 typealias FileId = UUID
 
 struct Mapping: Codable, Equatable {
+    
+    // MARK: - Types
+    
     struct Note: Codable, Equatable {
         let fileId: FileId
         var references: [InstanceId: NoteId]
-//        var isDeleted: Bool = false
     }
+    
+    // MARK: - Properties
     
     private (set) var notes: [Note] = []
     

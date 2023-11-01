@@ -8,11 +8,23 @@
 import Foundation
 
 class SystemCom {
+    
+    // MARK: - Properties
+    
+    private let currentDirectory: URL
+    
+    // MARK: - Lifecycle
+    
+    init(currentDirectory: URL) {
+        self.currentDirectory = currentDirectory
+    }
+    
+    // MARK: - Bash
+    
     @discardableResult
-    static func bash(currentDirectory: URL, 
-                     standardOutput: ((String) -> Void)? = nil,
-                     standardError: ((String) -> Void)? = nil,
-                     _ args: String...) -> Int32 {
+    func bash(standardOutput: ((String) -> Void)? = nil,
+              standardError: ((String) -> Void)? = nil,
+              _ args: String...) -> Int32 {
         let task = Process()
         task.launchPath = "/bin/bash"
         task.arguments = ["-c"] + args
