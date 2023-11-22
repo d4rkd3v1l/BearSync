@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8152964F2AF4D56C00B80913 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 8152964E2AF4D56C00B80913 /* KeychainAccess */; };
+		815296512AF4D81F00B80913 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815296502AF4D81F00B80913 /* Preferences.swift */; };
+		815296532B0CA48E00B80913 /* PublisherObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815296522B0CA48E00B80913 /* PublisherObservableObject.swift */; };
 		8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */; };
 		818037B62AEBAE7C00D3A37B /* SystemCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037B52AEBAE7C00D3A37B /* SystemCom.swift */; };
 		818037B82AEBB56F00D3A37B /* BearComTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037B72AEBB56F00D3A37B /* BearComTests.swift */; };
@@ -53,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		815296502AF4D81F00B80913 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		815296522B0CA48E00B80913 /* PublisherObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherObservableObject.swift; sourceTree = "<group>"; };
 		8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPanelHelper.swift; sourceTree = "<group>"; };
 		818037B52AEBAE7C00D3A37B /* SystemCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemCom.swift; sourceTree = "<group>"; };
 		818037B72AEBB56F00D3A37B /* BearComTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearComTests.swift; sourceTree = "<group>"; };
@@ -92,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8152964F2AF4D56C00B80913 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +145,8 @@
 			children = (
 				818037BB2AEEDE0300D3A37B /* Array+Extensions.swift */,
 				8184021D2AEFB37C00B79D1C /* String+Extensions.swift */,
+				815296502AF4D81F00B80913 /* Preferences.swift */,
+				815296522B0CA48E00B80913 /* PublisherObservableObject.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -238,6 +246,9 @@
 			dependencies = (
 			);
 			name = BearAppSync;
+			packageProductDependencies = (
+				8152964E2AF4D56C00B80913 /* KeychainAccess */,
+			);
 			productName = BearAppSync;
 			productReference = 81E4C5AA2ACD535A00BEAA2A /* BearAppSync.app */;
 			productType = "com.apple.product-type.application";
@@ -310,6 +321,9 @@
 				Base,
 			);
 			mainGroup = 81E4C5A12ACD535A00BEAA2A;
+			packageReferences = (
+				8152964D2AF4D56C00B80913 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			productRefGroup = 81E4C5AB2ACD535A00BEAA2A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -352,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				815296512AF4D81F00B80913 /* Preferences.swift in Sources */,
 				818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */,
 				818037BF2AEEE73300D3A37B /* Response.swift in Sources */,
 				81D47D522AF136A00006283C /* TrashResult.swift in Sources */,
@@ -363,6 +378,7 @@
 				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
 				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,
 				818037C72AEEE79700D3A37B /* AddTextResult.swift in Sources */,
+				815296532B0CA48E00B80913 /* PublisherObservableObject.swift in Sources */,
 				81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */,
 				818037CD2AEEE84800D3A37B /* ResultType.swift in Sources */,
 				81D47D502AF0DDF30006283C /* Synchronizer.swift in Sources */,
@@ -697,6 +713,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8152964D2AF4D56C00B80913 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess#requirements";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8152964E2AF4D56C00B80913 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8152964D2AF4D56C00B80913 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 81E4C5A22ACD535A00BEAA2A /* Project object */;
 }

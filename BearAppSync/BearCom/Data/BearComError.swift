@@ -9,6 +9,7 @@ import Foundation
 
 enum BearComError: Error {
     case unknown
+    case bearAPITokenNotSet
     case apiError(BearAPIError)
 }
 

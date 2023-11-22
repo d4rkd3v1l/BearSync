@@ -7,9 +7,10 @@
 
 import Foundation
 
-private let tags = ["test", "test2"]
-
 enum SyncError: Error {
+    case bearAPITokenNotSet
+    case gitRepoURLNotSet
+    case gitRepoPathNotSet
     case syncInProgress
 }
 
@@ -17,39 +18,56 @@ class Synchronizer {
     
     // MARK: - Properties
     
+    static let shared = Synchronizer(bearCom: BearCom())
+    
+    @Preference(\.bearAPIToken) var bearAPIToken
+    @Preference(\.gitRepoURL) var gitRepoURL
+    @Preference(\.tags) var tags
+
     private let bearCom: BearCom
     private var systemCom: SystemCom!
     private var syncInProgress = false
     
     // MARK: - Lifecycle
     
-    init(bearCom: BearCom = BearCom.shared) {
+    init(bearCom: BearCom) {
         self.bearCom = bearCom
+        
+    }
+    
+    func handleURL(_ url: URL) {
+        self.bearCom.handleURL(url)
     }
     
     // MARK: - Synchronize
     
     @MainActor
     func synchronize() async throws {
+        
+        guard bearAPIToken != "" else { throw SyncError.bearAPITokenNotSet }
+        guard gitRepoURL != "" else { throw SyncError.gitRepoURLNotSet }
+        guard let gitRepoPath = try? OpenPanelHelper().getURL(for: "gitRepoPathBookmark") else { throw SyncError.gitRepoPathNotSet }
+
+        print("bearAPIToken \(bearAPIToken)")
+        print("gitRepoURL \(gitRepoURL)")
+
         guard !syncInProgress else { throw SyncError.syncInProgress }
         syncInProgress = true
         
         print("Starting sync...")
-        let openPanelHelper = OpenPanelHelper()
-        let gitRepoURL = try await openPanelHelper.openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
-        systemCom = SystemCom(currentDirectory: gitRepoURL)
-        let mappingURL = gitRepoURL.appending(path: "mapping.json")
+        systemCom = SystemCom(currentDirectory: gitRepoPath)
+        let mappingURL = gitRepoPath.appending(path: "mapping.json")
         var mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
         let instanceId = InstanceId(uuidString: UserDefaults.standard.string(forKey: "instanceId") ?? InstanceId().uuidString) ?? InstanceId()
         UserDefaults.standard.set(instanceId.uuidString, forKey: "instanceId")
         
         print("Exporting local notes...")
         var bearNoteIds = try await noteIdsFromBear(for: tags)
-        try await exportNotes(noteIds: bearNoteIds, for: instanceId, to: gitRepoURL, using: &mapping)
-        
+        try await exportNotes(noteIds: bearNoteIds, for: instanceId, to: gitRepoPath, using: &mapping)
+
         print("Removing locally deleted notes...")
-        try removeLocallyDeletedNotes(excludedNoteIds: bearNoteIds, for: instanceId, from: gitRepoURL, using: &mapping)
-        
+        try removeLocallyDeletedNotes(excludedNoteIds: bearNoteIds, for: instanceId, from: gitRepoPath, using: &mapping)
+
         try mapping.save(to: mappingURL)
         
         print("Fetching remote changes...")
@@ -60,8 +78,8 @@ class Synchronizer {
         mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
         
         print("Applying remote changes to local notes...")
-        try await updateNotesFromRemote(for: instanceId, with: gitRepoURL, using: &mapping)
-        
+        try await updateNotesFromRemote(for: instanceId, with: gitRepoPath, using: &mapping)
+
         print("Removing remotely deleted notes...")
         bearNoteIds = try await noteIdsFromBear(for: tags)
         try await removeRemotelyDeletedNotes(localNoteIds: bearNoteIds, using: mapping)
@@ -82,8 +100,7 @@ class Synchronizer {
     private func gitConfigure() {
         systemCom.bash("git config user.name \"BearAppSync\"")
         systemCom.bash("git config user.email \"no@mail.address\"")
-        systemCom.bash("git config pull.rebase false")
-        systemCom.bash("git remote set-url origin https://\(gitHubToken)@github.com/d4rkd3v1l/bear-sync.git")
+        systemCom.bash("git remote set-url origin \(gitRepoURL)")
     }
     
     private func gitCommit(message: String) {
@@ -92,7 +109,14 @@ class Synchronizer {
     }
     
     private func gitPull() {
-        systemCom.bash("git pull")
+        let status = systemCom.bash("git pull --no-rebase")
+        
+        if status != 0 {
+            // TODO: Send Notification?!
+            print(">>>>> Error during pull, probably merge-conflict. Status: \(status)")
+
+            // 1 = invalid repo url
+        }
     }
     
     private func gitPush() {
