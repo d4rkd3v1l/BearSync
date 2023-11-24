@@ -59,6 +59,12 @@ final class MappingTests: XCTestCase {
         XCTAssertEqual(sut.notes.count, 4)
     }
     
+    func testRemoveNote() throws {
+        let note = Mapping.Note(fileId: file3Id, references: [instance2Id : note4Id])
+        sut.removeNote(note)
+        XCTAssertEqual(sut.notes.count, 2)
+    }
+
     func testAddReference() throws {
         let result = sut.addReference(to: file3Id, noteId: note5Id, instanceId: instance1Id)
         XCTAssertTrue(result)

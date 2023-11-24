@@ -24,6 +24,9 @@
 		818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037CE2AEEE88B00D3A37B /* BearComError.swift */; };
 		8184021E2AEFB37C00B79D1C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8184021D2AEFB37C00B79D1C /* String+Extensions.swift */; };
 		818402202AEFB3B900B79D1C /* ExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8184021F2AEFB3B900B79D1C /* ExtensionTests.swift */; };
+		81A8AA922B0E378000056532 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA912B0E378000056532 /* Constants.swift */; };
+		81A8AA942B0E3C8800056532 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA932B0E3C8800056532 /* Logger.swift */; };
+		81A8AA962B0F32F300056532 /* PreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA952B0F32F300056532 /* PreferencesTests.swift */; };
 		81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* Mapping.swift */; };
 		81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearCom.swift */; };
 		81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4B2AEFB6220006283C /* MappingTests.swift */; };
@@ -73,6 +76,9 @@
 		818037D02AEFA80F00D3A37B /* BearAppSync.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = BearAppSync.xctestplan; sourceTree = "<group>"; };
 		8184021D2AEFB37C00B79D1C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		8184021F2AEFB3B900B79D1C /* ExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTests.swift; sourceTree = "<group>"; };
+		81A8AA912B0E378000056532 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		81A8AA932B0E3C8800056532 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		81A8AA952B0F32F300056532 /* PreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTests.swift; sourceTree = "<group>"; };
 		81C679B02AE3BD2F00C24537 /* Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapping.swift; sourceTree = "<group>"; };
 		81C679B22AE3DEBA00C24537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C679B32AE4E33A00C24537 /* BearCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearCom.swift; sourceTree = "<group>"; };
@@ -147,6 +153,7 @@
 				8184021D2AEFB37C00B79D1C /* String+Extensions.swift */,
 				815296502AF4D81F00B80913 /* Preferences.swift */,
 				815296522B0CA48E00B80913 /* PublisherObservableObject.swift */,
+				81A8AA912B0E378000056532 /* Constants.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -192,6 +199,7 @@
 				818037C92AEEE7ED00D3A37B /* Extensions */,
 				81E4C5AD2ACD535A00BEAA2A /* BearAppSyncApp.swift */,
 				81D47D4F2AF0DDF30006283C /* Synchronizer.swift */,
+				81A8AA932B0E3C8800056532 /* Logger.swift */,
 				818037B52AEBAE7C00D3A37B /* SystemCom.swift */,
 				8176ED652AD9720600D1BE24 /* OpenPanelHelper.swift */,
 				81C679B02AE3BD2F00C24537 /* Mapping.swift */,
@@ -217,6 +225,7 @@
 				8184021F2AEFB3B900B79D1C /* ExtensionTests.swift */,
 				81D47D4B2AEFB6220006283C /* MappingTests.swift */,
 				81D47D4D2AEFE6BE0006283C /* SystemComTests.swift */,
+				81A8AA952B0F32F300056532 /* PreferencesTests.swift */,
 			);
 			path = BearAppSyncTests;
 			sourceTree = "<group>";
@@ -367,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				815296512AF4D81F00B80913 /* Preferences.swift in Sources */,
+				81A8AA942B0E3C8800056532 /* Logger.swift in Sources */,
 				818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */,
 				818037BF2AEEE73300D3A37B /* Response.swift in Sources */,
 				81D47D522AF136A00006283C /* TrashResult.swift in Sources */,
@@ -377,6 +387,7 @@
 				818037C32AEEE76E00D3A37B /* CreateResult.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearAppSyncApp.swift in Sources */,
 				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,
+				81A8AA922B0E378000056532 /* Constants.swift in Sources */,
 				818037C72AEEE79700D3A37B /* AddTextResult.swift in Sources */,
 				815296532B0CA48E00B80913 /* PublisherObservableObject.swift in Sources */,
 				81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */,
@@ -396,6 +407,7 @@
 				818037B82AEBB56F00D3A37B /* BearComTests.swift in Sources */,
 				81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */,
 				81D47D4E2AEFE6BE0006283C /* SystemComTests.swift in Sources */,
+				81A8AA962B0F32F300056532 /* PreferencesTests.swift in Sources */,
 				818402202AEFB3B900B79D1C /* ExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -565,7 +577,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -594,7 +606,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.d4Rk.BearAppSync;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

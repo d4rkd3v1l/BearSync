@@ -20,6 +20,7 @@ class Synchronizer {
     
     static let shared = Synchronizer(bearCom: BearCom())
     
+    @Preference(\.instanceId) var instanceId
     @Preference(\.bearAPIToken) var bearAPIToken
     @Preference(\.gitRepoURL) var gitRepoURL
     @Preference(\.tags) var tags
@@ -27,14 +28,16 @@ class Synchronizer {
     private let bearCom: BearCom
     private var systemCom: SystemCom!
     private var syncInProgress = false
-    
+    private var logger: Logger!
+
     // MARK: - Lifecycle
     
     init(bearCom: BearCom) {
         self.bearCom = bearCom
-        
     }
     
+    // MARK: - Public API
+
     func handleURL(_ url: URL) {
         self.bearCom.handleURL(url)
     }
@@ -43,54 +46,53 @@ class Synchronizer {
     
     @MainActor
     func synchronize() async throws {
-        
+        let instanceId = InstanceId(uuidString: self.instanceId) ?? InstanceId()
+        self.instanceId = instanceId.uuidString
+
         guard bearAPIToken != "" else { throw SyncError.bearAPITokenNotSet }
         guard gitRepoURL != "" else { throw SyncError.gitRepoURLNotSet }
-        guard let gitRepoPath = try? OpenPanelHelper().getURL(for: "gitRepoPathBookmark") else { throw SyncError.gitRepoPathNotSet }
-
-        print("bearAPIToken \(bearAPIToken)")
-        print("gitRepoURL \(gitRepoURL)")
+        guard let gitRepoPath = try? OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue) else { throw SyncError.gitRepoPathNotSet }
 
         guard !syncInProgress else { throw SyncError.syncInProgress }
         syncInProgress = true
-        
-        print("Starting sync...")
+
         systemCom = SystemCom(currentDirectory: gitRepoPath)
+        logger = Logger(logFile: gitRepoPath.appending(component: "sync.log"))
+
+        try logger.log("Starting sync for tags: \(tags.map({ "#\($0)" }).joined(separator: " "))...")
         let mappingURL = gitRepoPath.appending(path: "mapping.json")
         var mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
-        let instanceId = InstanceId(uuidString: UserDefaults.standard.string(forKey: "instanceId") ?? InstanceId().uuidString) ?? InstanceId()
-        UserDefaults.standard.set(instanceId.uuidString, forKey: "instanceId")
-        
-        print("Exporting local notes...")
+
+        try logger.log("Exporting local notes...")
         var bearNoteIds = try await noteIdsFromBear(for: tags)
         try await exportNotes(noteIds: bearNoteIds, for: instanceId, to: gitRepoPath, using: &mapping)
 
-        print("Removing locally deleted notes...")
+        try logger.log("Removing locally deleted notes...")
         try removeLocallyDeletedNotes(excludedNoteIds: bearNoteIds, for: instanceId, from: gitRepoPath, using: &mapping)
 
         try mapping.save(to: mappingURL)
-        
-        print("Fetching remote changes...")
+
+        try logger.log("Fetching remote changes...")
         gitConfigure()
         gitCommit(message: "Updates from \(instanceId.uuidString)")
         gitPull()
         
         mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
-        
-        print("Applying remote changes to local notes...")
+
+        try logger.log("Applying remote changes to local notes...")
         try await updateNotesFromRemote(for: instanceId, with: gitRepoPath, using: &mapping)
 
-        print("Removing remotely deleted notes...")
+        try logger.log("Removing remotely deleted notes...")
         bearNoteIds = try await noteIdsFromBear(for: tags)
         try await removeRemotelyDeletedNotes(localNoteIds: bearNoteIds, using: mapping)
         
         try mapping.save(to: mappingURL)
-        
-        print("Pushing changes to remote...")
+
+        try logger.log("Pushing changes to remote...")
         gitCommit(message: "Additional updates from \(instanceId.uuidString)")
         gitPush()
-        
-        print("Done.")
+
+        try logger.log("Done.")
         syncInProgress = false
     }
     
@@ -98,9 +100,10 @@ class Synchronizer {
     
     // MARK: Git
     private func gitConfigure() {
-        systemCom.bash("git config user.name \"BearAppSync\"")
-        systemCom.bash("git config user.email \"no@mail.address\"")
+        systemCom.bash("git config user.name \"\(Constants.GitConfig.username.rawValue)\"")
+        systemCom.bash("git config user.email \"\(Constants.GitConfig.mail.rawValue)\"")
         systemCom.bash("git remote set-url origin \(gitRepoURL)")
+        systemCom.bash("echo \".DS_Store\nsync.log\n\" > .gitignore")
     }
     
     private func gitCommit(message: String) {
@@ -112,8 +115,8 @@ class Synchronizer {
         let status = systemCom.bash("git pull --no-rebase")
         
         if status != 0 {
+            try? logger.log(">>>>> Error during pull, probably merge-conflict. Status: \(status)")
             // TODO: Send Notification?!
-            print(">>>>> Error during pull, probably merge-conflict. Status: \(status)")
 
             // 1 = invalid repo url
         }
@@ -154,12 +157,12 @@ class Synchronizer {
         for note in mapping.notes {
             if let fileNoteId = note.references[instanceId] {
                 if !excludedNoteIds.contains(fileNoteId) {
-                    print("Note was deleted locally... Removing it from repo \(note.fileId)")
+                    try logger.log("Note was deleted locally... Removing it from repo \(note.fileId)")
                     let filename = baseURL.appending(component: note.fileId.uuidString)
                     try FileManager.default.removeItem(at: filename)
                     mapping.removeNote(note)
                 } else {
-                    print("Note still exists locally... Skipping \(note.fileId)")
+                    try logger.log("Note still exists locally... Skipping \(note.fileId)")
                 }
             } else {
                 fatalError("Mapping in invalid state! Probably sync was broken before...")
@@ -175,13 +178,13 @@ class Synchronizer {
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
                 let openNoteResult = try? await bearCom.openNote(noteId)
                 if openNoteResult?.note.sha256 != text.sha256 {
-                    print("Note changed... Updating \(note.fileId)")
+                    try logger.log("Note changed... Updating \(note.fileId)")
                     _ = try await bearCom.addText(text, to: noteId)
                 } else {
-                    print("Note unchanged... Skipping \(note.fileId)")
+                    try logger.log("Note unchanged... Skipping \(note.fileId)")
                 }
             } else { // Create
-                print("New note... Creating \(note.fileId)")
+                try logger.log("New note... Creating \(note.fileId)")
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
                 guard let noteId = try? await bearCom.create(with: text).identifier,
                       mapping.addReference(to: note.fileId, noteId: noteId, instanceId: instanceId) else {
@@ -194,9 +197,9 @@ class Synchronizer {
     private func removeRemotelyDeletedNotes(localNoteIds: [NoteId], using mapping: Mapping) async throws {
         for noteId in localNoteIds {
             if mapping.notes.contains(where: { $0.references.contains(where: { $0.value == noteId }) }) {
-                print("Note still exists remotely... Skipping \(noteId)")
+                try logger.log("Note still exists remotely... Skipping \(noteId)")
             } else {
-                print("Note was deleted remotely... Removing it locally \(noteId)")
+                try logger.log("Note was deleted remotely... Removing it locally \(noteId)")
                 _ = try await bearCom.trash(noteId: noteId)
             }
         }

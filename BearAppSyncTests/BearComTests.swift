@@ -15,7 +15,7 @@ final class BearComTests: XCTestCase {
         try super.setUpWithError()
         
         let urlOpener = MockURLOpener()
-        sut = BearCom(urlOpener: urlOpener, bearAPIToken: "")
+        sut = BearCom(urlOpener: urlOpener)
         urlOpener.urlCallBackHandler = sut.handleURL
     }
     

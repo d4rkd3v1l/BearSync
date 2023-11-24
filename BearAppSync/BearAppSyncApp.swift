@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KeychainAccess
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func application(_ application: NSApplication, open urls: [URL]) {
@@ -42,11 +43,11 @@ struct BearAppSyncApp: App {
                             case .gitRepoURLNotSet:
                                 print("Git Repo URL not set -> Settings")
 
-                            case .syncInProgress:
-                                print("Sync already in progress -> Aborting...")
-                                
                             case .gitRepoPathNotSet:
                                 print("Git Repo Path not set -> Settings")
+
+                            case .syncInProgress:
+                                print("Sync already in progress -> Aborting...")
                             }
                         }
                     }
@@ -58,7 +59,7 @@ struct BearAppSyncApp: App {
             SettingsLink {
                  Text("Preferences...")
             }.keyboardShortcut(",")
-            
+
             Divider()
             
             Button("Quit") {
@@ -68,15 +69,16 @@ struct BearAppSyncApp: App {
         
         Settings {
             SettingsPane()
-//                .background(WindowAccessor(window: $settingsWindow))
-//                .onChange(of: settingsWindow) { oldWindow, newWindow in
-//                    newWindow?.level = .floating
-//                }
+                .background(WindowAccessor(window: $settingsWindow))
+                .onChange(of: settingsWindow) { oldWindow, newWindow in
+                    newWindow?.level = .floating
+                }
         }
     }
 }
 
 struct SettingsPane: View {
+    @Preference(\.instanceId) var instanceId
     @Preference(\.bearAPIToken) var bearAPIToken
     @Preference(\.gitRepoURL) var gitRepoURL
     @Preference(\.tags) var tags
@@ -84,30 +86,46 @@ struct SettingsPane: View {
 
     var body: some View {
         Form {
-            SecureField("Bear API Token:", 
-                        text: Binding(get: { bearAPIToken }, set: { bearAPIToken = $0}),
+            HStack {
+                TextField("Instance ID:",
+                          text: Binding(get: { instanceId }, set: { _ in }),
+                          prompt: Text("Missing"))
+                .disabled(true)
+                Button("Copy") {
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.declareTypes([.string], owner: nil)
+                    pasteboard.setString(instanceId, forType: .string)
+                }
+            }
+            Text("The Instance ID of this BearAppSync installation.")
+                .font(.footnote)
+                .foregroundStyle(.gray)
+            Spacer()
+
+            SecureField("Bear API Token:",
+                        text: $bearAPIToken,
                         prompt: Text("Required"))
             Text("Bear → Help → Advanced → API Token")
                 .font(.footnote)
                 .foregroundStyle(.gray)
             Spacer()
 
-            SecureField("Git Repo URL:",
-                        text: Binding(get: { gitRepoURL }, set: { gitRepoURL = $0 }),
+            SecureField("Git repo URL:",
+                        text: $gitRepoURL,
                         prompt: Text("Required"))
-            Text("The remote URL of the git repo, used for synchronizing.\nE.g. \"https://<yourToken>@github.com/<user>/<repo>.git\"")
+            Text("The remote URL of the git repo, used for synchronizing.\nE.g. \"https://<token>@github.com/<user>/bear-sync.git\"")
                 .font(.footnote)
                 .foregroundStyle(.gray)
             Spacer()
 
             HStack {
-                TextField("Repo folder on disk:",
+                TextField("Git repo directory:",
                           text: Binding(get: { gitRepoPath?.path() ?? "" }, set: { _ in }),
                           prompt: Text("Required"))
                 .disabled(true)
                 Button("Choose") {
                     Task {
-                        gitRepoPath = try await OpenPanelHelper().openDirectory(at: nil, bookmark: "gitRepoPathBookmark")
+                        gitRepoPath = try await OpenPanelHelper().openDirectory(at: nil, bookmark: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue)
                     }
                 }
             }
@@ -124,12 +142,24 @@ struct SettingsPane: View {
                 .foregroundStyle(.gray)
             Spacer()
 
+            #if DEBUG
+            Spacer()
+            Spacer()
+            Spacer()
+
+            Button("RESET") {
+                try! Keychain().removeAll()
+                UserDefaults.standard.removeObject(forKey: Constants.PreferencesKey.tags.rawValue)
+                UserDefaults.standard.removeObject(forKey: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue)
+            }
+            #endif
+
         }
         .padding()
         .frame(width: 500)
         .fixedSize()
         .onAppear {
-            gitRepoPath = try? OpenPanelHelper().getURL(for: "gitRepoPathBookmark")
+            gitRepoPath = try? OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue)
         }
     }
 }

@@ -25,14 +25,19 @@ final class Preferences {
         self.keychain = keychain
     }
 
-    @KeychainEntry("bearAPIToken")
+    @KeychainEntry(Constants.PreferencesKey.bearAPIToken.rawValue)
     var bearAPIToken: String = ""
 
-    @KeychainEntry("gitRepoURL")
+    @KeychainEntry(Constants.PreferencesKey.gitRepoURL.rawValue)
     var gitRepoURL: String = ""
 
-    @UserDefault("tags")
+    @UserDefault(Constants.PreferencesKey.instanceId.rawValue)
+    var instanceId: String = ""
+
+    @UserDefault(Constants.PreferencesKey.tags.rawValue)
     var tags: [String] = []
+
+    // TODO: InstanceId
 }
 
 // MARK: - Preference
