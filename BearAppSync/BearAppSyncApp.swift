@@ -7,174 +7,84 @@
 
 import SwiftUI
 import KeychainAccess
-
-class AppDelegate: NSObject, NSApplicationDelegate {
-    func application(_ application: NSApplication, open urls: [URL]) {
-        if let url = urls.first {
-            Synchronizer.shared.handleURL(url)
-        }
-    }
-}
+import UserNotifications
 
 @main
 struct BearAppSyncApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
-    @State private var icon = "arrow.triangle.2.circlepath"
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @State private var icon = Constants.AppIconName.idle.rawValue
+    @State private var settingsWindow: NSWindow?
 
-    @State var settingsWindow: NSWindow?
+    private let openSettingsAction = TriggerButtonAction()
+    private let notificationManager = NotificationManager()
 
     var body: some Scene {
         MenuBarExtra("Bear App Sync", systemImage: icon) {
             Button("Synchronize") {
                 Task {
+                    appDelegate.didReceiveShowSettingsIntent = {
+                        Task { @MainActor in
+                            try openSettingsAction()
+                        }
+                    }
                     do {
-                        icon = "clock.arrow.2.circlepath"
+                        icon = Constants.AppIconName.syncInProgress.rawValue
                         try await Synchronizer.shared.synchronize()
-                        icon = "arrow.triangle.2.circlepath"
+                        icon = Constants.AppIconName.idle.rawValue
                     } catch {
-                        icon = "arrow.triangle.2.circlepath"
-                        
                         if let syncError = error as? SyncError {
                             switch syncError {
                             case .bearAPITokenNotSet:
-                                print("Bear API Token not set -> Settings")
-                                
+                                icon = Constants.AppIconName.syncError.rawValue
+                                try await notificationManager.sendNotification(title: "Bear API Token not set",
+                                                                               body: "Please provide your Bear API Token in settings.",
+                                                                               category: .showSettings)
+
                             case .gitRepoURLNotSet:
-                                print("Git Repo URL not set -> Settings")
+                                icon = Constants.AppIconName.syncError.rawValue
+                                try await notificationManager.sendNotification(title: "Git Repo URL not set",
+                                                                               body: "Please provide your git repo URL in settings.",
+                                                                               category: .showSettings)
 
                             case .gitRepoPathNotSet:
-                                print("Git Repo Path not set -> Settings")
+                                icon = Constants.AppIconName.syncError.rawValue
+                                try await notificationManager.sendNotification(title: "Git repo path not set",
+                                                                               body: "Please provide the path to the git repo in settings.",
+                                                                               category: .showSettings)
 
                             case .syncInProgress:
-                                print("Sync already in progress -> Aborting...")
+                                icon = Constants.AppIconName.syncInProgress.rawValue
+                                try await notificationManager.sendNotification(title: "Sync already in progress",
+                                                                               body: "Please wait until the current sync finished.")
                             }
                         }
                     }
                 }
-            }.keyboardShortcut("s")
-            
+            }
+            .keyboardShortcut("s")
+
             Divider()
 
             SettingsLink {
                  Text("Preferences...")
-            }.keyboardShortcut(",")
+            }
+            .keyboardShortcut(",")
+            .buttonStyle(TriggerButtonStyle(trigger: openSettingsAction.binding))
 
             Divider()
             
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
-            }.keyboardShortcut("q")
+            }
+            .keyboardShortcut("q")
         }
-        
+
         Settings {
-            SettingsPane()
+            SettingsView()
                 .background(WindowAccessor(window: $settingsWindow))
                 .onChange(of: settingsWindow) { oldWindow, newWindow in
                     newWindow?.level = .floating
                 }
         }
     }
-}
-
-struct SettingsPane: View {
-    @Preference(\.instanceId) var instanceId
-    @Preference(\.bearAPIToken) var bearAPIToken
-    @Preference(\.gitRepoURL) var gitRepoURL
-    @Preference(\.tags) var tags
-    @State var gitRepoPath: URL?
-
-    var body: some View {
-        Form {
-            HStack {
-                TextField("Instance ID:",
-                          text: Binding(get: { instanceId }, set: { _ in }),
-                          prompt: Text("Missing"))
-                .disabled(true)
-                Button("Copy") {
-                    let pasteboard = NSPasteboard.general
-                    pasteboard.declareTypes([.string], owner: nil)
-                    pasteboard.setString(instanceId, forType: .string)
-                }
-            }
-            Text("The Instance ID of this BearAppSync installation.")
-                .font(.footnote)
-                .foregroundStyle(.gray)
-            Spacer()
-
-            SecureField("Bear API Token:",
-                        text: $bearAPIToken,
-                        prompt: Text("Required"))
-            Text("Bear → Help → Advanced → API Token")
-                .font(.footnote)
-                .foregroundStyle(.gray)
-            Spacer()
-
-            SecureField("Git repo URL:",
-                        text: $gitRepoURL,
-                        prompt: Text("Required"))
-            Text("The remote URL of the git repo, used for synchronizing.\nE.g. \"https://<token>@github.com/<user>/bear-sync.git\"")
-                .font(.footnote)
-                .foregroundStyle(.gray)
-            Spacer()
-
-            HStack {
-                TextField("Git repo directory:",
-                          text: Binding(get: { gitRepoPath?.path() ?? "" }, set: { _ in }),
-                          prompt: Text("Required"))
-                .disabled(true)
-                Button("Choose") {
-                    Task {
-                        gitRepoPath = try await OpenPanelHelper().openDirectory(at: nil, bookmark: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue)
-                    }
-                }
-            }
-            Text("The local path of the git repo, used for synchronizing.\nE.g. \"/Users/<name>/bear-sync\"")
-                .font(.footnote)
-                .foregroundStyle(.gray)
-            Spacer()
-
-            TextField("Tags:",
-                      text: Binding(get: { tags.joined(separator: " ") }, set: { tags = $0.components(separatedBy: " ") }),
-                      prompt: Text("Required"))
-            Text("Tags to be included in the synchronization process. Multiple tags must be seperated by spaces.\nE.g. \"tag1 tag2 tag3\"")
-                .font(.footnote)
-                .foregroundStyle(.gray)
-            Spacer()
-
-            #if DEBUG
-            Spacer()
-            Spacer()
-            Spacer()
-
-            Button("RESET") {
-                try! Keychain().removeAll()
-                UserDefaults.standard.removeObject(forKey: Constants.PreferencesKey.tags.rawValue)
-                UserDefaults.standard.removeObject(forKey: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue)
-            }
-            #endif
-
-        }
-        .padding()
-        .frame(width: 500)
-        .fixedSize()
-        .onAppear {
-            gitRepoPath = try? OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue)
-        }
-    }
-}
-
-/// https://stackoverflow.com/a/77184303/2019384
-struct WindowAccessor: NSViewRepresentable {
-    @Binding var window: NSWindow?
-
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async {
-            self.window = view.window
-        }
-        return view
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {}
 }

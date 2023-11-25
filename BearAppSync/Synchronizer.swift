@@ -59,7 +59,7 @@ class Synchronizer {
         systemCom = SystemCom(currentDirectory: gitRepoPath)
         logger = Logger(logFile: gitRepoPath.appending(component: "sync.log"))
 
-        try logger.log("Starting sync for tags: \(tags.map({ "#\($0)" }).joined(separator: " "))...")
+        try logger.log("--- Starting sync with tags: \(tags.map({ "#\($0)" }).joined(separator: " ")) ---")
         let mappingURL = gitRepoPath.appending(path: "mapping.json")
         var mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
 
@@ -84,8 +84,8 @@ class Synchronizer {
 
         try logger.log("Removing remotely deleted notes...")
         bearNoteIds = try await noteIdsFromBear(for: tags)
-        try await removeRemotelyDeletedNotes(localNoteIds: bearNoteIds, using: mapping)
-        
+        try await removeRemotelyDeletedNotes(localNoteIds: bearNoteIds, for: instanceId, using: mapping)
+
         try mapping.save(to: mappingURL)
 
         try logger.log("Pushing changes to remote...")
@@ -144,7 +144,8 @@ class Synchronizer {
         for noteId in noteIds {
             let openNoteResult = try await bearCom.openNote(noteId)
             let fileId = mapping.fileId(for: openNoteResult.identifier, in: instanceId) ?? mapping.addNote(with: openNoteResult.identifier, for: instanceId)
-            
+            try logger.log("Exporting note with fileId \(fileId)...")
+
             let filename = baseURL.appending(component: fileId.uuidString)
             try openNoteResult.note.write(to: filename, atomically: true, encoding: .utf8)
         }
@@ -157,15 +158,16 @@ class Synchronizer {
         for note in mapping.notes {
             if let fileNoteId = note.references[instanceId] {
                 if !excludedNoteIds.contains(fileNoteId) {
-                    try logger.log("Note was deleted locally... Removing it from repo \(note.fileId)")
+                    try logger.log("Note with fileId \(note.fileId) was deleted locally. Removing it from repo...")
                     let filename = baseURL.appending(component: note.fileId.uuidString)
                     try FileManager.default.removeItem(at: filename)
                     mapping.removeNote(note)
                 } else {
-                    try logger.log("Note still exists locally... Skipping \(note.fileId)")
+                    try logger.log("Note with fileId \(note.fileId) still exists locally. Skipping...")
                 }
             } else {
-                fatalError("Mapping in invalid state! Probably sync was broken before...")
+                assertionFailure("Mapping in invalid state! Probably sync was broken before...")
+                try logger.log("ERROR: Mapping in invalid state! Probably sync was broken before...")
             }
         }
     }
@@ -178,28 +180,34 @@ class Synchronizer {
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
                 let openNoteResult = try? await bearCom.openNote(noteId)
                 if openNoteResult?.note.sha256 != text.sha256 {
-                    try logger.log("Note changed... Updating \(note.fileId)")
+                    try logger.log("Note with fileId \(note.fileId) changed remotely. Applying changes...")
                     _ = try await bearCom.addText(text, to: noteId)
                 } else {
-                    try logger.log("Note unchanged... Skipping \(note.fileId)")
+                    try logger.log("Note with fileId \(note.fileId) unchanged. Skipping...")
                 }
             } else { // Create
-                try logger.log("New note... Creating \(note.fileId)")
+                try logger.log("New note with fileId  \(note.fileId) created remotely. Adding note locally...")
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
                 guard let noteId = try? await bearCom.create(with: text).identifier,
                       mapping.addReference(to: note.fileId, noteId: noteId, instanceId: instanceId) else {
-                    fatalError("Could not add reference to note!")
+                    assertionFailure("Could not add reference to note!")
+                    try logger.log("ERROR: Could not add note with fileId \(note.fileId) locally!")
+                    return
                 }
             }
         }
     }
     
-    private func removeRemotelyDeletedNotes(localNoteIds: [NoteId], using mapping: Mapping) async throws {
+    private func removeRemotelyDeletedNotes(localNoteIds: [NoteId], 
+                                            for instanceId: InstanceId,
+                                            using mapping: Mapping) async throws {
         for noteId in localNoteIds {
+            let fileId = mapping.fileId(for: noteId, in: instanceId)
+
             if mapping.notes.contains(where: { $0.references.contains(where: { $0.value == noteId }) }) {
-                try logger.log("Note still exists remotely... Skipping \(noteId)")
+                try logger.log("Note with fileId \(fileId ?? noteId) still exists remotely. Skipping...")
             } else {
-                try logger.log("Note was deleted remotely... Removing it locally \(noteId)")
+                try logger.log("Note with fileId \(fileId ?? noteId) was deleted remotely. Removing it locally...")
                 _ = try await bearCom.trash(noteId: noteId)
             }
         }

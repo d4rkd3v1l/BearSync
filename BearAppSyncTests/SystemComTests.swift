@@ -20,7 +20,7 @@ final class SystemComTests: XCTestCase {
     
     func testSimpleCommand() throws {
         systemCom.bash(standardOutput: { output in
-            XCTAssertEqual(output, "/Users/1337-h4x0r/Library/Containers/com.d4Rk.BearAppSync2/Data/tmp\n")
+            XCTAssertEqual(output, "/Users/1337-h4x0r/Library/Containers/com.d4Rk.BearAppSync/Data/tmp\n")
         }, standardError: { _ in
             XCTFail("No error expected.")
         }, "pwd")

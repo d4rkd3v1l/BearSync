@@ -8,7 +8,6 @@
 import Combine
 
 final class PublisherObservableObject: ObservableObject {
-
     var subscriber: AnyCancellable?
 
     init(publisher: AnyPublisher<Void, Never>) {

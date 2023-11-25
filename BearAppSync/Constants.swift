@@ -23,4 +23,10 @@ struct Constants {
         case username = "BearAppSync"
         case mail = "bear@app.sync"
     }
+
+    enum AppIconName: String {
+        case idle = "arrow.triangle.2.circlepath"
+        case syncInProgress = "clock.arrow.2.circlepath"
+        case syncError = "exclamationmark.arrow.triangle.2.circlepath"
+    }
 }
