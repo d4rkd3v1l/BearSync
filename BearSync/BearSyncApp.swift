@@ -65,14 +65,29 @@ struct BearSyncApp: App {
 
             Divider()
 
-            SettingsLink {
-                 Text("Preferences...")
+            if #available(macOS 14.0, *) {
+                SettingsLink {
+                    Text("Preferences...")
+                }
+                .keyboardShortcut(",")
+                .buttonStyle(TriggerButtonStyle(trigger: openSettingsAction.binding))
             }
-            .keyboardShortcut(",")
-            .buttonStyle(TriggerButtonStyle(trigger: openSettingsAction.binding))
+            else {
+                Button(action: {
+                    if #available(macOS 13.0, *) {
+                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    }
+                    else {
+                        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                    }
+                }, label: {
+                    Text("Preferences...")
+                })
+                .keyboardShortcut(",")
+            }
 
             Divider()
-            
+
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }
@@ -80,11 +95,15 @@ struct BearSyncApp: App {
         }
 
         Settings {
-            SettingsView()
-                .background(WindowAccessor(window: $settingsWindow))
-                .onChange(of: settingsWindow) { oldWindow, newWindow in
-                    newWindow?.level = .floating
-                }
+            if #available(macOS 14.0, *) {
+                SettingsView()
+                    .background(WindowAccessor(window: $settingsWindow))
+                    .onChange(of: settingsWindow) { oldWindow, newWindow in
+                        newWindow?.level = .floating
+                    }
+            } else {
+                SettingsView()
+            }
         }
     }
 }
