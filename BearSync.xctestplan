@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "3049DC8C-8C64-42A5-9CA5-ACBFBDDDA700",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BearSync.xcodeproj",
+      "identifier" : "81E4C5A92ACD535A00BEAA2A",
+      "name" : "BearSync"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BearSync.xcodeproj",
+        "identifier" : "81E4C5BA2ACD535C00BEAA2A",
+        "name" : "BearSyncTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BearSync.xcodeproj",
+        "identifier" : "81E4C5C42ACD535C00BEAA2A",
+        "name" : "BearSyncUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
