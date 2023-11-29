@@ -129,9 +129,10 @@ class Synchronizer {
     private func noteIdsFromBear(for tags: [String]) async throws -> [NoteId] {
         var allNoteIds: [NoteId] = []
         for tag in tags {
-            let searchResult = try await bearCom.search(tag: tag)
-            let noteIds = searchResult.notes.map({ $0.identifier })
-            allNoteIds.append(contentsOf: noteIds)
+            let searchResult = try? await bearCom.search(tag: tag)
+            if let noteIds = searchResult?.notes.map({ $0.identifier }) {
+                allNoteIds.append(contentsOf: noteIds)
+            }
         }
         return allNoteIds
     }
@@ -166,8 +167,7 @@ class Synchronizer {
                     try logger.log("Note with fileId \(note.fileId) still exists locally. Skipping...")
                 }
             } else {
-                assertionFailure("Mapping in invalid state! Probably sync was broken before...")
-                try logger.log("ERROR: Mapping in invalid state! Probably sync was broken before...")
+                try logger.log("Note with fileId \(note.fileId) does not exist yet locally. Will be added later...")
             }
         }
     }

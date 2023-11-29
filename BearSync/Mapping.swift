@@ -18,6 +18,47 @@ struct Mapping: Codable, Equatable {
     struct Note: Codable, Equatable {
         let fileId: FileId
         var references: [InstanceId: NoteId]
+
+        enum CodingKeys: String, CodingKey {
+            case fileId
+            case references
+        }
+
+        init(from decoder: Decoder) throws {
+            let container: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+            self.fileId = try container.decode(FileId.self, forKey: .fileId)
+            let stringReferences = try container.decode([String: String].self, forKey: .references)
+
+            self.references = [:]
+            for (stringKey, stringValue) in stringReferences {
+                guard let key = UUID(uuidString: stringKey) else {
+                    throw DecodingError.dataCorruptedError(forKey: .references,
+                                                           in: container,
+                                                           debugDescription: "Invalid key '\(stringKey)'")
+                }
+
+                guard let value = UUID(uuidString: stringValue) else {
+                    throw DecodingError.dataCorruptedError(forKey: .references,
+                                                           in: container,
+                                                           debugDescription: "Invalid value '\(stringValue)'")
+                }
+
+                self.references[key] = value
+            }
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(fileId, forKey: .fileId)
+
+            let stringReferences: [String: String] = Dictionary(uniqueKeysWithValues: references.map { ($0.uuidString, $1.uuidString) })
+            try container.encode(stringReferences, forKey: .references)
+        }
+
+        init(fileId: FileId, references: [InstanceId: NoteId]) {
+            self.fileId = fileId
+            self.references = references
+        }
     }
     
     // MARK: - Properties
