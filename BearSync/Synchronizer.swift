@@ -27,8 +27,8 @@ class Synchronizer {
 
     private let bearCom: BearCom
     private var systemCom: SystemCom!
-    private var syncInProgress = false
     private var logger: Logger!
+    private var syncInProgress = false
 
     // MARK: - Lifecycle
     
@@ -125,7 +125,8 @@ class Synchronizer {
     private func gitPush() {
         systemCom.bash("git push")
     }
-    
+
+    // MARK: Notes
     private func noteIdsFromBear(for tags: [String]) async throws -> [NoteId] {
         var allNoteIds: [NoteId] = []
         for tag in tags {
@@ -136,8 +137,7 @@ class Synchronizer {
         }
         return allNoteIds
     }
-    
-    // MARK: Notes
+
     private func exportNotes(noteIds: [NoteId],
                              for instanceId: InstanceId,
                              to baseURL: URL,

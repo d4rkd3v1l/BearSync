@@ -25,7 +25,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         if response.actionIdentifier == NotificationManager.Action.showSettings.rawValue {
-            didReceiveShowSettingsIntent?()
+            DispatchQueue.main.async {
+                self.didReceiveShowSettingsIntent?()
+            }
         }
     }
 }

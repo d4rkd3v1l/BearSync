@@ -20,7 +20,7 @@ struct SettingsView: View {
             HStack {
                 TextField("Instance ID:",
                           text: Binding(get: { instanceId }, set: { _ in }),
-                          prompt: Text("Missing"))
+                          prompt: Text("Will be generated on first sync."))
                 .disabled(true)
                 Button("Copy") {
                     let pasteboard = NSPasteboard.general

@@ -21,45 +21,7 @@ struct BearSyncApp: App {
     var body: some Scene {
         MenuBarExtra("Bear Sync", systemImage: icon) {
             Button("Synchronize") {
-                Task {
-                    appDelegate.didReceiveShowSettingsIntent = {
-                        Task { @MainActor in
-                            try openSettingsAction()
-                        }
-                    }
-                    do {
-                        icon = Constants.AppIconName.syncInProgress.rawValue
-                        try await Synchronizer.shared.synchronize()
-                        icon = Constants.AppIconName.idle.rawValue
-                    } catch {
-                        if let syncError = error as? SyncError {
-                            switch syncError {
-                            case .bearAPITokenNotSet:
-                                icon = Constants.AppIconName.syncError.rawValue
-                                try await notificationManager.sendNotification(title: "Bear API Token not set",
-                                                                               body: "Please provide your Bear API Token in settings.",
-                                                                               category: .showSettings)
-
-                            case .gitRepoURLNotSet:
-                                icon = Constants.AppIconName.syncError.rawValue
-                                try await notificationManager.sendNotification(title: "Git Repo URL not set",
-                                                                               body: "Please provide your git repo URL in settings.",
-                                                                               category: .showSettings)
-
-                            case .gitRepoPathNotSet:
-                                icon = Constants.AppIconName.syncError.rawValue
-                                try await notificationManager.sendNotification(title: "Git repo path not set",
-                                                                               body: "Please provide the path to the git repo in settings.",
-                                                                               category: .showSettings)
-
-                            case .syncInProgress:
-                                icon = Constants.AppIconName.syncInProgress.rawValue
-                                try await notificationManager.sendNotification(title: "Sync already in progress",
-                                                                               body: "Please wait until the current sync finished.")
-                            }
-                        }
-                    }
-                }
+                synchronize()
             }
             .keyboardShortcut("s")
 
@@ -71,13 +33,11 @@ struct BearSyncApp: App {
                 }
                 .keyboardShortcut(",")
                 .buttonStyle(TriggerButtonStyle(trigger: openSettingsAction.binding))
-            }
-            else {
+            } else {
                 Button(action: {
                     if #available(macOS 13.0, *) {
                         NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                    }
-                    else {
+                    } else {
                         NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
                     }
                 }, label: {
@@ -103,6 +63,57 @@ struct BearSyncApp: App {
                     }
             } else {
                 SettingsView()
+            }
+        }
+    }
+
+    private func synchronize() {
+        Task {
+            appDelegate.didReceiveShowSettingsIntent = {
+                if #available(macOS 14.0, *) {
+                    Task {
+                        try openSettingsAction()
+                    }
+                } else {
+                    if #available(macOS 13.0, *) {
+                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    } else {
+                        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                    }
+                }
+            }
+
+            do {
+                icon = Constants.AppIconName.syncInProgress.rawValue
+                try await Synchronizer.shared.synchronize()
+                icon = Constants.AppIconName.idle.rawValue
+            } catch {
+                if let syncError = error as? SyncError {
+                    switch syncError {
+                    case .bearAPITokenNotSet:
+                        icon = Constants.AppIconName.syncError.rawValue
+                        try await notificationManager.sendNotification(title: "Bear API Token not set",
+                                                                       body: "Please provide your Bear API Token in settings.",
+                                                                       category: .showSettings)
+
+                    case .gitRepoURLNotSet:
+                        icon = Constants.AppIconName.syncError.rawValue
+                        try await notificationManager.sendNotification(title: "Git Repo URL not set",
+                                                                       body: "Please provide your git repo URL in settings.",
+                                                                       category: .showSettings)
+
+                    case .gitRepoPathNotSet:
+                        icon = Constants.AppIconName.syncError.rawValue
+                        try await notificationManager.sendNotification(title: "Git repo path not set",
+                                                                       body: "Please provide the path to the git repo in settings.",
+                                                                       category: .showSettings)
+
+                    case .syncInProgress:
+                        icon = Constants.AppIconName.syncInProgress.rawValue
+                        try await notificationManager.sendNotification(title: "Sync already in progress",
+                                                                       body: "Please wait until the current sync finished.")
+                    }
+                }
             }
         }
     }
