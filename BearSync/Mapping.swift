@@ -8,7 +8,7 @@
 import Foundation
 
 typealias InstanceId = UUID
-typealias NoteId = UUID
+typealias NoteId = String // Note: For some (older?) notes, Bear uses invalid UUIDs like "BD3D2449-7240-4514-8562-7A8CFBC95898-521-0000212BF1260284"
 typealias FileId = UUID
 
 struct Mapping: Codable, Equatable {
@@ -37,13 +37,13 @@ struct Mapping: Codable, Equatable {
                                                            debugDescription: "Invalid key '\(stringKey)'")
                 }
 
-                guard let value = UUID(uuidString: stringValue) else {
-                    throw DecodingError.dataCorruptedError(forKey: .references,
-                                                           in: container,
-                                                           debugDescription: "Invalid value '\(stringValue)'")
-                }
+//                guard let value = UUID(uuidString: stringValue) else {
+//                    throw DecodingError.dataCorruptedError(forKey: .references,
+//                                                           in: container,
+//                                                           debugDescription: "Invalid value '\(stringValue)'")
+//                }
 
-                self.references[key] = value
+                self.references[key] = stringValue
             }
         }
 
@@ -51,7 +51,7 @@ struct Mapping: Codable, Equatable {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(fileId, forKey: .fileId)
 
-            let stringReferences: [String: String] = Dictionary(uniqueKeysWithValues: references.map { ($0.uuidString, $1.uuidString) })
+            let stringReferences: [String: String] = Dictionary(uniqueKeysWithValues: references.map { ($0.uuidString, $1) })
             try container.encode(stringReferences, forKey: .references)
         }
 

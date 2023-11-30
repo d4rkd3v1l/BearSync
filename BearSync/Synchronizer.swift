@@ -205,9 +205,9 @@ class Synchronizer {
             let fileId = mapping.fileId(for: noteId, in: instanceId)
 
             if mapping.notes.contains(where: { $0.references.contains(where: { $0.value == noteId }) }) {
-                try logger.log("Note with fileId \(fileId ?? noteId) still exists remotely. Skipping...")
+                try logger.log("Note with fileId \(fileId?.uuidString ?? noteId) still exists remotely. Skipping...")
             } else {
-                try logger.log("Note with fileId \(fileId ?? noteId) was deleted remotely. Removing it locally...")
+                try logger.log("Note with fileId \(fileId?.uuidString ?? noteId) was deleted remotely. Removing it locally...")
                 _ = try await bearCom.trash(noteId: noteId)
             }
         }

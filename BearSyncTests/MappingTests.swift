@@ -18,18 +18,18 @@ final class MappingTests: XCTestCase {
     let file4Id = UUID(uuidString: "00000000-F17E-0000-0000-000000000004")!
     let instance1Id = UUID(uuidString: "00000000-1257-0000-0000-000000000001")!
     let instance2Id = UUID(uuidString: "00000000-1257-0000-0000-000000000002")!
-    let note1Id = UUID(uuidString: "00000000-2073-0000-0000-000000000001")!
-    let note2Id = UUID(uuidString: "00000000-2073-0000-0000-000000000002")!
-    let note3Id = UUID(uuidString: "00000000-2073-0000-0000-000000000003")!
-    let note4Id = UUID(uuidString: "00000000-2073-0000-0000-000000000004")!
-    let note5Id = UUID(uuidString: "00000000-2073-0000-0000-000000000005")!
+    let note1Id = "00000000-2073-0000-0000-000000000001"
+    let note2Id = "00000000-2073-0000-0000-000000000002"
+    let note3Id = "00000000-2073-0000-0000-000000000003"
+    let note4Id = "00000000-2073-0000-0000-000000000004"
+    let note5Id = "00000000-2073-0000-0000-000000000005"
     
     override func setUpWithError() throws {
         let notes = [Mapping.Note(fileId: file1Id, references: [instance1Id: note1Id,
                                                                 instance2Id: note2Id]),
                      Mapping.Note(fileId: file2Id, references: [instance1Id : note3Id]),
                      Mapping.Note(fileId: file3Id, references: [instance2Id : note4Id])]
-        
+
         sut = Mapping(notes: notes)
     }
     

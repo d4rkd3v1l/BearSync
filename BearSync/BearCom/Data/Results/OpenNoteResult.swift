@@ -18,8 +18,7 @@ struct OpenNoteResult: ResultType  {
     
     init?(queryItems: [URLQueryItem]) {
         guard let note = queryItems["note"],
-              let identifierString = queryItems["identifier"],
-              let identifier = UUID(uuidString: identifierString),
+              let identifier = queryItems["identifier"],
               let title = queryItems["title"],
               let tags = queryItems["tags"],
               let isTrashed = queryItems["is_trashed"],

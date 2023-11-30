@@ -30,17 +30,17 @@ final class BearComTests: XCTestCase {
     }
     
     func testOpenNoteSuccess() async throws {
-        let openNoteResult = try await sut.openNote(UUID(uuidString: "13371337-1337-1337-1337-133713371337")!)
-        XCTAssertEqual(openNoteResult.identifier, UUID(uuidString: "2593B4B6-F3B8-45CA-A260-ABAB13E380E9")!)
+        let openNoteResult = try await sut.openNote("13371337-1337-1337-1337-133713371337")
+        XCTAssertEqual(openNoteResult.identifier, "2593B4B6-F3B8-45CA-A260-ABAB13E380E9")
     }
     func testOpenNoteFailure() async throws {
-        let openNoteResult = try? await sut.openNote(UUID(uuidString: "00000000-0000-0000-0000-000000000000")!)
+        let openNoteResult = try? await sut.openNote("00000000-0000-0000-0000-000000000000")
         XCTAssertNil(openNoteResult)
     }
     
     func testCreateSuccess() async throws {
         let createResult = try await sut.create(with: "success")
-        XCTAssertEqual(createResult.identifier, UUID(uuidString: "6E06ACC8-E68F-4F5F-A21C-6A1448B75F2D")!)
+        XCTAssertEqual(createResult.identifier, "6E06ACC8-E68F-4F5F-A21C-6A1448B75F2D")
     }
     
     func testCreateFailure() async throws {
@@ -49,22 +49,22 @@ final class BearComTests: XCTestCase {
     }
     
     func testAddTextSuccess() async throws {
-        let addTextResult = try await sut.addText("success", to: UUID())
+        let addTextResult = try await sut.addText("success", to: UUID().uuidString)
         XCTAssertEqual(addTextResult.title, "Test2")
     }
     
     func testAddTextFailure() async throws {
-        let addTextResult = try? await sut.addText("failure", to: UUID())
+        let addTextResult = try? await sut.addText("failure", to: UUID().uuidString)
         XCTAssertNil(addTextResult)
     }
     
     func testTrashSuccess() async throws {
-        _ = try await sut.trash(noteId: UUID(uuidString: "13371337-1337-1337-1337-133713371337")!)
+        _ = try await sut.trash(noteId: "13371337-1337-1337-1337-133713371337")
         // Note: No assertion required, as not actual response data is returned and not throwing an error is therefore already considered "passed".
     }
     
     func testTrashFailure() async throws {
-        let trashResult = try? await sut.openNote(UUID(uuidString: "00000000-0000-0000-0000-000000000000")!)
+        let trashResult = try? await sut.openNote("00000000-0000-0000-0000-000000000000")
         XCTAssertNil(trashResult)
     }
 }

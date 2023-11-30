@@ -12,8 +12,7 @@ struct CreateResult: ResultType  {
     let title: String
     
     init?(queryItems: [URLQueryItem]) {
-        guard let identifierString = queryItems["identifier"],
-              let identifier = UUID(uuidString: identifierString),
+        guard let identifier = queryItems["identifier"],
               let title = queryItems["title"] else { return nil }
         
         self.identifier = identifier

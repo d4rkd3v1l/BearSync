@@ -71,7 +71,7 @@ class BearCom {
 
     func openNote(_ noteId: NoteId) async throws -> OpenNoteResult {
         let requestId = UUID()
-        let queryItems = [URLQueryItem(name: "id", value: noteId.uuidString),
+        let queryItems = [URLQueryItem(name: "id", value: noteId),
                           URLQueryItem(name: "exclude_trashed", value: "yes"),
                           URLQueryItem(name: "show_window", value: "no"),
                           URLQueryItem(name: "open_note", value: "no")]
@@ -121,7 +121,7 @@ class BearCom {
 
     func addText(_ text: String, to noteId: NoteId) async throws -> AddTextResult {
         let requestId = UUID()
-        let queryItems = [URLQueryItem(name: "id", value: noteId.uuidString),
+        let queryItems = [URLQueryItem(name: "id", value: noteId),
                           URLQueryItem(name: "text", value: text),
                           URLQueryItem(name: "mode", value: "replace_all"),
                           URLQueryItem(name: "open_note", value: "no"),
@@ -146,7 +146,7 @@ class BearCom {
 
     func trash(noteId: NoteId) async throws -> TrashResult {
         let requestId = UUID()
-        let queryItems = [URLQueryItem(name: "id", value: noteId.uuidString),
+        let queryItems = [URLQueryItem(name: "id", value: noteId),
                           URLQueryItem(name: "show_window", value: "no")]
         let url = URL(action: .trash, requestId: requestId, queryItems: queryItems)!
         urlOpener.open(url)
