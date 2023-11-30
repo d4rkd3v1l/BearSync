@@ -37,12 +37,6 @@ struct Mapping: Codable, Equatable {
                                                            debugDescription: "Invalid key '\(stringKey)'")
                 }
 
-//                guard let value = UUID(uuidString: stringValue) else {
-//                    throw DecodingError.dataCorruptedError(forKey: .references,
-//                                                           in: container,
-//                                                           debugDescription: "Invalid value '\(stringValue)'")
-//                }
-
                 self.references[key] = stringValue
             }
         }
