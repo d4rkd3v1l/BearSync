@@ -78,9 +78,6 @@ class BearCom {
         let url = URL(action: .openNote, requestId: requestId, queryItems: queryItems)!
         urlOpener.open(url)
 
-
-
-
         for await response in responses {
             if response.requestId == requestId {
                 switch response.result {
