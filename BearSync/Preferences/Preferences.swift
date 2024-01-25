@@ -34,4 +34,7 @@ final class Preferences {
 
     @UserDefault(Constants.PreferencesKey.tags.rawValue)
     var tags: [String] = []
+
+    @UserDefault(Constants.PreferencesKey.useSQLite.rawValue)
+    var useSQLite: Bool = false
 }
