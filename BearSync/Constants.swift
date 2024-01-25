@@ -18,6 +18,7 @@ struct Constants {
         case bearAPIToken
         case gitRepoURL
         case tags
+        case useSQLite
     }
 
     enum GitConfig: String {

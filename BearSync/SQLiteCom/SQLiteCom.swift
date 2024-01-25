@@ -9,15 +9,6 @@ import Foundation
 import SQLite3
 import RegexBuilder
 
-enum SQLiteComError: Error {
-    case unknown
-    case couldNotOpenDatabase
-    case couldNotExecuteQuery
-    case couldNotBindParameter
-    case noteNotFound
-    case couldNotParseNote
-}
-
 class SQLiteCom {
     func search(tag: String) async throws -> SearchResult {
         let path = try await dbPath()
@@ -44,8 +35,6 @@ class SQLiteCom {
         guard sqlite3_open(path, &db) == SQLITE_OK else {
             throw SQLiteComError.couldNotOpenDatabase
         }
-
-        print("Database opened.")
 
         var query: OpaquePointer?
         defer { sqlite3_finalize(query) }
@@ -110,8 +99,6 @@ class SQLiteCom {
             throw SQLiteComError.couldNotOpenDatabase
         }
 
-        print("Database opened.")
-
         var query: OpaquePointer?
         defer { sqlite3_finalize(query) }
         let queryString = "SELECT ZTEXT, ZUNIQUEIDENTIFIER, ZTITLE, ZTRASHED, ZMODIFICATIONDATE, ZCREATIONDATE FROM ZSFNOTE WHERE ZUNIQUEIDENTIFIER = ?"
@@ -160,6 +147,10 @@ class SQLiteCom {
 }
 
 private extension String {
+    /// Simple tag detection
+    ///
+    /// Original Bear App tag detection is closed source and therefore unknown. But this should get pretty close and at least cover a wide range of normal tag usage.
+    /// TODO: Ignore tags inside code (blocks).
     var tags: [String] {
             let regex = Regex {
                 "#"
