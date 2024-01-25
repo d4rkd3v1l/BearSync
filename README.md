@@ -14,7 +14,7 @@ This is a very early version, more or less really just an MVP and heavy WIP (at 
 
 - Just build and run
 - The App will sit in the menu bar, where you should provide some information in `Preferences` first
-- Then just `Synchronize` to trigger a sync. It will not automatically do so
+- Then just `Synchronize` to trigger a sync. Currently no synchronization will be triggered automatically.
 
 ## How it works
 
@@ -32,7 +32,7 @@ We just put all relevant notes (matched by tags) in a git repo and use this to u
 
 But maybe you just want to take a look at [`Synchronizer.synchronize()`](https://github.com/d4rkd3v1l/BearSync/blob/main/BearSync/Synchronizer.swift#L48) method and follow the flow there.
 
-We also keep a mapping to be able to map identical note from different bear app installations, as those will have different identifiers inside bear app.
+We also keep a mapping to be able to map identical notes from different bear app installations, as those will have different identifiers inside bear app.
 
 ## TODO
 
