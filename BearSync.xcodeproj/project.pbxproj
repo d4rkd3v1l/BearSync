@@ -27,6 +27,7 @@
 		81A8AA922B0E378000056532 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA912B0E378000056532 /* Constants.swift */; };
 		81A8AA942B0E3C8800056532 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA932B0E3C8800056532 /* Logger.swift */; };
 		81A8AA962B0F32F300056532 /* PreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA952B0F32F300056532 /* PreferencesTests.swift */; };
+		81C20CB12B6121A300B34AED /* SQLiteCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C20CB02B6121A300B34AED /* SQLiteCom.swift */; };
 		81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* Mapping.swift */; };
 		81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearCom.swift */; };
 		81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4B2AEFB6220006283C /* MappingTests.swift */; };
@@ -87,6 +88,7 @@
 		81A8AA912B0E378000056532 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		81A8AA932B0E3C8800056532 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		81A8AA952B0F32F300056532 /* PreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTests.swift; sourceTree = "<group>"; };
+		81C20CB02B6121A300B34AED /* SQLiteCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteCom.swift; sourceTree = "<group>"; };
 		81C679B02AE3BD2F00C24537 /* Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapping.swift; sourceTree = "<group>"; };
 		81C679B22AE3DEBA00C24537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C679B32AE4E33A00C24537 /* BearCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearCom.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				818037C82AEEE7C300D3A37B /* Data */,
 				818037CA2AEEE80F00D3A37B /* Action.swift */,
 				81C679B32AE4E33A00C24537 /* BearCom.swift */,
+				81C20CB02B6121A300B34AED /* SQLiteCom.swift */,
 				81D47D532AF23DF80006283C /* URLOpenerProtocol.swift */,
 			);
 			path = BearCom;
@@ -421,6 +424,7 @@
 				81D47D542AF23DF80006283C /* URLOpenerProtocol.swift in Sources */,
 				81EE24B32B11CB1C0070C08B /* UserDefault.swift in Sources */,
 				818037C52AEEE77E00D3A37B /* OpenNoteResult.swift in Sources */,
+				81C20CB12B6121A300B34AED /* SQLiteCom.swift in Sources */,
 				818037C12AEEE75A00D3A37B /* SearchResult.swift in Sources */,
 				818037C32AEEE76E00D3A37B /* CreateResult.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearSyncApp.swift in Sources */,

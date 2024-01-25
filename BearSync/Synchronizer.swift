@@ -130,7 +130,7 @@ class Synchronizer {
     private func noteIdsFromBear(for tags: [String]) async throws -> [NoteId] {
         var allNoteIds: [NoteId] = []
         for tag in tags {
-            let searchResult = try? await bearCom.search(tag: tag)
+            let searchResult = try? await SQLiteCom().search(tag: tag)
             if let noteIds = searchResult?.notes.map({ $0.identifier }) {
                 allNoteIds.append(contentsOf: noteIds)
             }
@@ -143,7 +143,7 @@ class Synchronizer {
                              to baseURL: URL,
                              using mapping: inout Mapping) async throws {
         for noteId in noteIds {
-            let openNoteResult = try await bearCom.openNote(noteId)
+            let openNoteResult = try await SQLiteCom().openNote(noteId)
             let fileId = mapping.fileId(for: openNoteResult.identifier, in: instanceId) ?? mapping.addNote(with: openNoteResult.identifier, for: instanceId)
             try logger.log("Exporting note with fileId \(fileId)...")
 
@@ -178,7 +178,7 @@ class Synchronizer {
         for note in mapping.notes {
             if let noteId = note.references[instanceId] {  // Update
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
-                let openNoteResult = try? await bearCom.openNote(noteId)
+                let openNoteResult = try? await SQLiteCom().openNote(noteId)
                 if openNoteResult?.note.sha256 != text.sha256 {
                     try logger.log("Note with fileId \(note.fileId) changed remotely. Applying changes...")
                     _ = try await bearCom.addText(text, to: noteId)
