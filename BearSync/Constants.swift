@@ -10,6 +10,7 @@ import Foundation
 struct Constants {
     enum UserDefaultsKey: String {
         case gitRepoPathBookmark
+        case bearAppSQLiteDBPathBookmark
     }
 
     enum PreferencesKey: String {
@@ -17,6 +18,7 @@ struct Constants {
         case bearAPIToken
         case gitRepoURL
         case tags
+        case useSQLite
     }
 
     enum GitConfig: String {

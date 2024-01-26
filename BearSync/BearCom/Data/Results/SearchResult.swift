@@ -16,9 +16,11 @@ struct SearchResult: ResultType {
         let tags: String
         let pin: String
     }
-    
+
     let notes: [Note]
-    
+}
+
+extension SearchResult {
     init?(queryItems: [URLQueryItem]) {
         guard let notes = queryItems["notes"],
               let data = notes.data(using: .utf8),

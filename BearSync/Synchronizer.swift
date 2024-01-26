@@ -18,24 +18,38 @@ class Synchronizer {
     
     // MARK: - Properties
     
-    static let shared = Synchronizer(bearCom: BearCom())
-    
+    static let shared = Synchronizer(bearCom: BearCom(), sqliteCom: SQLiteCom(pathProvider: pathProvider))
+
     @Preference(\.instanceId) var instanceId
     @Preference(\.bearAPIToken) var bearAPIToken
     @Preference(\.gitRepoURL) var gitRepoURL
     @Preference(\.tags) var tags
+    @Preference(\.useSQLite) var useSQLite
 
     private let bearCom: BearCom
+    private let sqliteCom: SQLiteCom
     private var systemCom: SystemCom!
     private var logger: Logger!
     private var syncInProgress = false
 
     // MARK: - Lifecycle
     
-    init(bearCom: BearCom) {
+    init(bearCom: BearCom, sqliteCom: SQLiteCom) {
         self.bearCom = bearCom
+        self.sqliteCom = sqliteCom
     }
-    
+
+    private static func pathProvider() async throws -> String {
+        let bearDBFilePath = ("~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data/database.sqlite" as NSString).expandingTildeInPath
+
+        if let url = try? OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.bearAppSQLiteDBPathBookmark.rawValue) {
+            return url.path(percentEncoded: false)
+        }
+
+        let url = try await OpenPanelHelper().openFile(at: NSURL.fileURL(withPath: bearDBFilePath), bookmark: Constants.UserDefaultsKey.bearAppSQLiteDBPathBookmark.rawValue)
+        return url.path(percentEncoded: false)
+    }
+
     // MARK: - Public API
 
     func handleURL(_ url: URL) {
@@ -130,7 +144,12 @@ class Synchronizer {
     private func noteIdsFromBear(for tags: [String]) async throws -> [NoteId] {
         var allNoteIds: [NoteId] = []
         for tag in tags {
-            let searchResult = try? await bearCom.search(tag: tag)
+            let searchResult: SearchResult?
+            if useSQLite {
+                searchResult = try? await sqliteCom.search(tag: tag)
+            } else {
+                searchResult = try? await bearCom.search(tag: tag)
+            }
             if let noteIds = searchResult?.notes.map({ $0.identifier }) {
                 allNoteIds.append(contentsOf: noteIds)
             }
@@ -143,7 +162,13 @@ class Synchronizer {
                              to baseURL: URL,
                              using mapping: inout Mapping) async throws {
         for noteId in noteIds {
-            let openNoteResult = try await bearCom.openNote(noteId)
+            let openNoteResult: OpenNoteResult
+            if useSQLite {
+                openNoteResult = try await sqliteCom.openNote(noteId)
+            } else {
+                openNoteResult = try await bearCom.openNote(noteId)
+            }
+
             let fileId = mapping.fileId(for: openNoteResult.identifier, in: instanceId) ?? mapping.addNote(with: openNoteResult.identifier, for: instanceId)
             try logger.log("Exporting note with fileId \(fileId)...")
 
@@ -178,8 +203,14 @@ class Synchronizer {
         for note in mapping.notes {
             if let noteId = note.references[instanceId] {  // Update
                 let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
-                let openNoteResult = try? await bearCom.openNote(noteId)
-                if openNoteResult?.note.sha256 != text.sha256 {
+                let openNoteResult: OpenNoteResult
+                if useSQLite {
+                    openNoteResult = try await sqliteCom.openNote(noteId)
+                } else {
+                    openNoteResult = try await bearCom.openNote(noteId)
+                }
+
+                if openNoteResult.note.sha256 != text.sha256 {
                     try logger.log("Note with fileId \(note.fileId) changed remotely. Applying changes...")
                     _ = try await bearCom.addText(text, to: noteId)
                 } else {

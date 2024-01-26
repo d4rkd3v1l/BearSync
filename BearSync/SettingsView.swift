@@ -13,6 +13,7 @@ struct SettingsView: View {
     @Preference(\.bearAPIToken) var bearAPIToken
     @Preference(\.gitRepoURL) var gitRepoURL
     @Preference(\.tags) var tags
+    @Preference(\.useSQLite) var useSQLite
     @State var gitRepoPath: URL?
 
     var body: some View {
@@ -69,6 +70,14 @@ struct SettingsView: View {
                       text: Binding(get: { tags.joined(separator: " ") }, set: { tags = $0.components(separatedBy: " ") }),
                       prompt: Text("Required"))
             Text("Tags to be included in the synchronization process. Multiple tags must be seperated by spaces.\nE.g. \"tag1 tag2 tag3\"")
+                .font(.footnote)
+                .foregroundStyle(.gray)
+            Spacer()
+
+            Toggle("Use SQLite:",
+                   isOn: $useSQLite)
+                .toggleStyle(.switch)
+            Text("Using SQLite for some read operations will remove flickering and focus change during sync. However, this is not officially supported by Bear App and therefore may lead to issues.")
                 .font(.footnote)
                 .foregroundStyle(.gray)
             Spacer()
