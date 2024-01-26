@@ -15,7 +15,9 @@ struct OpenNoteResult: ResultType  {
     let isTrashed: String
     let modificationDate: String
     let creationDate: String
-    
+}
+
+extension OpenNoteResult {
     init?(queryItems: [URLQueryItem]) {
         guard let note = queryItems["note"],
               let identifier = queryItems["identifier"],
