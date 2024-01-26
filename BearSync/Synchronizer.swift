@@ -18,7 +18,7 @@ class Synchronizer {
     
     // MARK: - Properties
     
-    static let shared = Synchronizer(bearCom: BearCom(), sqliteCom: SQLiteCom())
+    static let shared = Synchronizer(bearCom: BearCom(), sqliteCom: SQLiteCom(pathProvider: pathProvider))
 
     @Preference(\.instanceId) var instanceId
     @Preference(\.bearAPIToken) var bearAPIToken
@@ -38,7 +38,18 @@ class Synchronizer {
         self.bearCom = bearCom
         self.sqliteCom = sqliteCom
     }
-    
+
+    private static func pathProvider() async throws -> String {
+        let bearDBFilePath = ("~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data/database.sqlite" as NSString).expandingTildeInPath
+
+        if let url = try? OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.bearAppSQLiteDBPathBookmark.rawValue) {
+            return url.path(percentEncoded: false)
+        }
+
+        let url = try await OpenPanelHelper().openFile(at: NSURL.fileURL(withPath: bearDBFilePath), bookmark: Constants.UserDefaultsKey.bearAppSQLiteDBPathBookmark.rawValue)
+        return url.path(percentEncoded: false)
+    }
+
     // MARK: - Public API
 
     func handleURL(_ url: URL) {
