@@ -10,22 +10,17 @@ import SQLite3
 import RegexBuilder
 
 class SQLiteCom {
+    private let pathProvider: () async throws -> String
+
+    init(pathProvider: @escaping () async throws -> String) {
+        self.pathProvider = pathProvider
+    }
+
     func search(tag: String) async throws -> SearchResult {
-        let path = try await dbPath()
+        let path = try await pathProvider()
         let notes = try await notes(at: path, for: tag)
 
         return SearchResult(notes: notes)
-    }
-
-    private func dbPath() async throws -> String {
-        let bearDBFilePath = ("~/Library/Group Containers/9K33E3U3T4.net.shinyfrog.bear/Application Data/database.sqlite" as NSString).expandingTildeInPath
-
-        if let url = try? await OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.bearAppSQLiteDBPathBookmark.rawValue) {
-            return url.path(percentEncoded: false)
-        }
-
-        let url = try await OpenPanelHelper().openFile(at: NSURL.fileURL(withPath: bearDBFilePath), bookmark: Constants.UserDefaultsKey.bearAppSQLiteDBPathBookmark.rawValue)
-        return url.path(percentEncoded: false)
     }
 
     private func notes(at path: String, for tag: String) async throws -> [SearchResult.Note] {
@@ -87,7 +82,7 @@ class SQLiteCom {
     }
 
     func openNote(_ noteId: NoteId) async throws -> OpenNoteResult {
-        let path = try await dbPath()
+        let path = try await pathProvider()
         return try await note(at: path, for: noteId)
     }
 
