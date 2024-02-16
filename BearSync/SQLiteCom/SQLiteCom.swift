@@ -7,7 +7,6 @@
 
 import Foundation
 import SQLite3
-import RegexBuilder
 
 class SQLiteCom {
     private let pathProvider: () async throws -> String
@@ -139,39 +138,4 @@ class SQLiteCom {
                                     creationDate: String(cString: rawCreationDate))
         return result
     }
-}
-
-private extension String {
-    /// Simple tag detection
-    ///
-    /// Original Bear App tag detection is closed source and therefore unknown. But this should get pretty close and at least cover a wide range of normal tag usage.
-    /// TODO: Ignore tags inside code (blocks).
-    var tags: [String] {
-            let regex = Regex {
-                "#"
-                OneOrMore {
-                    CharacterClass(
-                        .anyOf("#(){}"),
-                        .whitespace
-                    )
-                    .inverted
-                }
-            }
-
-            let matches = self.matches(of: regex)
-            var result = matches.map { match in
-                String(self[match.range.lowerBound..<match.range.upperBound].dropFirst())
-            }
-
-            // Nested tags
-            result.enumerated().forEach {
-                let nested = $0.element.split(separator: "/")
-                for index in 0..<nested.count-1 {
-                    result.append(nested[0...index].joined(separator: "/"))
-                }
-
-            }
-
-            return result
-        }
 }

@@ -42,6 +42,8 @@
 		81E4C5B22ACD535B00BEAA2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E4C5B12ACD535B00BEAA2A /* Assets.xcassets */; };
 		81E4C5CA2ACD535C00BEAA2A /* BearSyncUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5C92ACD535C00BEAA2A /* BearSyncUITests.swift */; };
 		81E4C5CC2ACD535C00BEAA2A /* BearSyncUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4C5CB2ACD535C00BEAA2A /* BearSyncUITestsLaunchTests.swift */; };
+		81EA2C012B7FE738008B55F3 /* String+tags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EA2C002B7FE738008B55F3 /* String+tags.swift */; };
+		81EA2C032B7FE7BC008B55F3 /* String+tagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EA2C022B7FE7BC008B55F3 /* String+tagsTests.swift */; };
 		81EE24A82B1144620070C08B /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 81EE24A72B1144620070C08B /* KeychainAccess */; };
 		81EE24AA2B11CA620070C08B /* WindowAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE24A92B11CA620070C08B /* WindowAccessor.swift */; };
 		81EE24AC2B11CA7A0070C08B /* TriggerButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE24AB2B11CA7A0070C08B /* TriggerButtonStyle.swift */; };
@@ -111,6 +113,8 @@
 		81E4C5C52ACD535C00BEAA2A /* BearSyncUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BearSyncUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E4C5C92ACD535C00BEAA2A /* BearSyncUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearSyncUITests.swift; sourceTree = "<group>"; };
 		81E4C5CB2ACD535C00BEAA2A /* BearSyncUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearSyncUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		81EA2C002B7FE738008B55F3 /* String+tags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+tags.swift"; sourceTree = "<group>"; };
+		81EA2C022B7FE7BC008B55F3 /* String+tagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+tagsTests.swift"; sourceTree = "<group>"; };
 		81EE24A92B11CA620070C08B /* WindowAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAccessor.swift; sourceTree = "<group>"; };
 		81EE24AB2B11CA7A0070C08B /* TriggerButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerButtonStyle.swift; sourceTree = "<group>"; };
 		81EE24AE2B11CAE80070C08B /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
@@ -176,6 +180,7 @@
 				8184021D2AEFB37C00B79D1C /* String+Extensions.swift */,
 				81EE24AB2B11CA7A0070C08B /* TriggerButtonStyle.swift */,
 				81EE24A92B11CA620070C08B /* WindowAccessor.swift */,
+				81EA2C002B7FE738008B55F3 /* String+tags.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 				81D47D4B2AEFB6220006283C /* MappingTests.swift */,
 				81A8AA952B0F32F300056532 /* PreferencesTests.swift */,
 				81C20CB52B6273C800B34AED /* SQLiteComTests.swift */,
+				81EA2C022B7FE7BC008B55F3 /* String+tagsTests.swift */,
 				81D47D4D2AEFE6BE0006283C /* SystemComTests.swift */,
 			);
 			path = BearSyncTests;
@@ -363,7 +369,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					81E4C5A92ACD535A00BEAA2A = {
 						CreatedOnToolsVersion = 15.0;
@@ -435,6 +441,7 @@
 				815296512AF4D81F00B80913 /* Preferences.swift in Sources */,
 				8147DB852B113F59005F8736 /* SettingsView.swift in Sources */,
 				81A8AA942B0E3C8800056532 /* Logger.swift in Sources */,
+				81EA2C012B7FE738008B55F3 /* String+tags.swift in Sources */,
 				818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */,
 				818037BF2AEEE73300D3A37B /* Response.swift in Sources */,
 				81D47D522AF136A00006283C /* TrashResult.swift in Sources */,
@@ -473,6 +480,7 @@
 			files = (
 				818037B82AEBB56F00D3A37B /* BearComTests.swift in Sources */,
 				81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */,
+				81EA2C032B7FE7BC008B55F3 /* String+tagsTests.swift in Sources */,
 				81D47D4E2AEFE6BE0006283C /* SystemComTests.swift in Sources */,
 				81C20CB62B6273C800B34AED /* SQLiteComTests.swift in Sources */,
 				81A8AA962B0F32F300056532 /* PreferencesTests.swift in Sources */,
@@ -539,6 +547,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -602,6 +611,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -633,6 +643,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 455K6552B4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -663,6 +674,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 455K6552B4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -690,6 +702,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 455K6552B4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -709,6 +722,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 455K6552B4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -727,6 +741,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 455K6552B4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -744,6 +759,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 455K6552B4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
