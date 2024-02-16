@@ -41,7 +41,7 @@ final class SQLiteComTests: XCTestCase {
 
     func testOpenNoteFailure() async throws {
         do {
-            let result = try await sut.openNote("InvalidIdentifier")
+            _ = try await sut.openNote("InvalidIdentifier")
             XCTFail("Error expected.")
         } catch {
             XCTAssertEqual(error as! SQLiteComError, .noteNotFound)
