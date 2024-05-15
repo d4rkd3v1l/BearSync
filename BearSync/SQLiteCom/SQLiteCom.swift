@@ -33,7 +33,7 @@ class SQLiteCom {
         var query: OpaquePointer?
         defer { sqlite3_finalize(query) }
 
-        let queryString = "SELECT ZTITLE, ZUNIQUEIDENTIFIER, ZCREATIONDATE, ZMODIFICATIONDATE, ZPINNED, ZTEXT FROM ZSFNOTE WHERE ZTRASHED = '0'"
+        let queryString = "SELECT ZTITLE, ZUNIQUEIDENTIFIER, ZCREATIONDATE, ZMODIFICATIONDATE, ZPINNED, ZTEXT FROM ZSFNOTE WHERE ZTRASHED = '0' AND ZARCHIVED='0'"
 
         guard sqlite3_prepare_v2(db, queryString, -1, &query, nil) == SQLITE_OK else {
             throw SQLiteComError.couldNotExecuteQuery
