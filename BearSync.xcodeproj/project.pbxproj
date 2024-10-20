@@ -31,9 +31,7 @@
 		81C20CB12B6121A300B34AED /* SQLiteCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C20CB02B6121A300B34AED /* SQLiteCom.swift */; };
 		81C20CB42B62732500B34AED /* SQLiteComError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C20CB32B62732500B34AED /* SQLiteComError.swift */; };
 		81C20CB62B6273C800B34AED /* SQLiteComTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C20CB52B6273C800B34AED /* SQLiteComTests.swift */; };
-		81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B02AE3BD2F00C24537 /* Mapping.swift */; };
 		81C679B42AE4E33A00C24537 /* BearCom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C679B32AE4E33A00C24537 /* BearCom.swift */; };
-		81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4B2AEFB6220006283C /* MappingTests.swift */; };
 		81D47D4E2AEFE6BE0006283C /* SystemComTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4D2AEFE6BE0006283C /* SystemComTests.swift */; };
 		81D47D502AF0DDF30006283C /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D4F2AF0DDF30006283C /* Synchronizer.swift */; };
 		81D47D522AF136A00006283C /* TrashResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D47D512AF136A00006283C /* TrashResult.swift */; };
@@ -52,6 +50,7 @@
 		81EE24B32B11CB1C0070C08B /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE24B22B11CB1C0070C08B /* UserDefault.swift */; };
 		81EE24B62B11CE2B0070C08B /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE24B52B11CE2B0070C08B /* NotificationManager.swift */; };
 		81EE24B82B11D06D0070C08B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE24B72B11D06D0070C08B /* AppDelegate.swift */; };
+		81FFF0A52CC43099005BF67D /* OpenNoteResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FFF0A42CC43099005BF67D /* OpenNoteResultTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,10 +96,8 @@
 		81C20CB02B6121A300B34AED /* SQLiteCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteCom.swift; sourceTree = "<group>"; };
 		81C20CB32B62732500B34AED /* SQLiteComError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteComError.swift; sourceTree = "<group>"; };
 		81C20CB52B6273C800B34AED /* SQLiteComTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteComTests.swift; sourceTree = "<group>"; };
-		81C679B02AE3BD2F00C24537 /* Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapping.swift; sourceTree = "<group>"; };
 		81C679B22AE3DEBA00C24537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		81C679B32AE4E33A00C24537 /* BearCom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BearCom.swift; sourceTree = "<group>"; };
-		81D47D4B2AEFB6220006283C /* MappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingTests.swift; sourceTree = "<group>"; };
 		81D47D4D2AEFE6BE0006283C /* SystemComTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemComTests.swift; sourceTree = "<group>"; };
 		81D47D4F2AF0DDF30006283C /* Synchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synchronizer.swift; sourceTree = "<group>"; };
 		81D47D512AF136A00006283C /* TrashResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashResult.swift; sourceTree = "<group>"; };
@@ -122,6 +119,7 @@
 		81EE24B22B11CB1C0070C08B /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		81EE24B52B11CE2B0070C08B /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		81EE24B72B11D06D0070C08B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		81FFF0A42CC43099005BF67D /* OpenNoteResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNoteResultTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,7 +241,6 @@
 				81E4C5AD2ACD535A00BEAA2A /* BearSyncApp.swift */,
 				81A8AA912B0E378000056532 /* Constants.swift */,
 				81C679B22AE3DEBA00C24537 /* Info.plist */,
-				81C679B02AE3BD2F00C24537 /* Mapping.swift */,
 				8147DB842B113F59005F8736 /* SettingsView.swift */,
 				81D47D4F2AF0DDF30006283C /* Synchronizer.swift */,
 			);
@@ -255,7 +252,7 @@
 			children = (
 				818037B72AEBB56F00D3A37B /* BearComTests.swift */,
 				8184021F2AEFB3B900B79D1C /* ExtensionTests.swift */,
-				81D47D4B2AEFB6220006283C /* MappingTests.swift */,
+				81FFF0A42CC43099005BF67D /* OpenNoteResultTests.swift */,
 				81A8AA952B0F32F300056532 /* PreferencesTests.swift */,
 				81C20CB52B6273C800B34AED /* SQLiteComTests.swift */,
 				81EA2C022B7FE7BC008B55F3 /* String+tagsTests.swift */,
@@ -467,7 +464,6 @@
 				81D47D502AF0DDF30006283C /* Synchronizer.swift in Sources */,
 				8184021E2AEFB37C00B79D1C /* String+Extensions.swift in Sources */,
 				81EE24AC2B11CA7A0070C08B /* TriggerButtonStyle.swift in Sources */,
-				81C679B12AE3BD2F00C24537 /* Mapping.swift in Sources */,
 				818037CB2AEEE80F00D3A37B /* Action.swift in Sources */,
 				81EE24B62B11CE2B0070C08B /* NotificationManager.swift in Sources */,
 				818037BC2AEEDE0300D3A37B /* Array+Extensions.swift in Sources */,
@@ -479,11 +475,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				818037B82AEBB56F00D3A37B /* BearComTests.swift in Sources */,
-				81D47D4C2AEFB6220006283C /* MappingTests.swift in Sources */,
 				81EA2C032B7FE7BC008B55F3 /* String+tagsTests.swift in Sources */,
 				81D47D4E2AEFE6BE0006283C /* SystemComTests.swift in Sources */,
 				81C20CB62B6273C800B34AED /* SQLiteComTests.swift in Sources */,
 				81A8AA962B0F32F300056532 /* PreferencesTests.swift in Sources */,
+				81FFF0A52CC43099005BF67D /* OpenNoteResultTests.swift in Sources */,
 				818402202AEFB3B900B79D1C /* ExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

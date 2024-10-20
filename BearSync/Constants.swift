@@ -14,7 +14,7 @@ struct Constants {
     }
 
     enum PreferencesKey: String {
-        case instanceId
+        case clientId
         case bearAPIToken
         case gitRepoURL
         case tags

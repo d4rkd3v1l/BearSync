@@ -20,7 +20,7 @@ class Synchronizer {
     
     static let shared = Synchronizer(bearCom: BearCom(), sqliteCom: SQLiteCom(pathProvider: pathProvider))
 
-    @Preference(\.instanceId) var instanceId
+    @Preference(\.clientId) var clientId
     @Preference(\.bearAPIToken) var bearAPIToken
     @Preference(\.gitRepoURL) var gitRepoURL
     @Preference(\.tags) var tags
@@ -60,8 +60,8 @@ class Synchronizer {
     
     @MainActor
     func synchronize() async throws {
-        let instanceId = InstanceId(uuidString: self.instanceId) ?? InstanceId()
-        self.instanceId = instanceId.uuidString
+        let clientId = ClientId(uuidString: self.clientId) ?? ClientId()
+        self.clientId = clientId.uuidString
 
         guard bearAPIToken != "" else { throw SyncError.bearAPITokenNotSet }
         guard gitRepoURL != "" else { throw SyncError.gitRepoURLNotSet }
@@ -74,39 +74,33 @@ class Synchronizer {
         logger = Logger(logFile: gitRepoPath.appending(component: "sync.log"))
 
         try logger.log("--- Starting sync with tags: \(tags.map({ "#\($0)" }).joined(separator: " ")) ---")
-        let mappingURL = gitRepoPath.appending(path: "mapping.json")
-        var mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
 
-        try logger.log("Exporting local notes...")
-        var bearNoteIds = try await noteIdsFromBear(for: tags)
-        try await exportNotes(noteIds: bearNoteIds, for: instanceId, to: gitRepoPath, using: &mapping)
+        try logger.log("[1] Exporting local notes...")
+        let localNoteIds = try await noteIdsFromBear(for: tags)
+        var localNotes = try await notesFromBear(for: localNoteIds)
+        try await exportNotes(notes: localNotes, to: gitRepoPath)
 
-        try logger.log("Removing locally deleted notes...")
-        try removeLocallyDeletedNotes(excludedNoteIds: bearNoteIds, for: instanceId, from: gitRepoPath, using: &mapping)
+        try logger.log("[2] Removing locally deleted notes...")
+        localNotes = try await notesFromBear(for: localNoteIds)
+        try removeLocallyDeletedNotes(localNotes: localNotes, from: gitRepoPath)
 
-        try mapping.save(to: mappingURL)
-
-        try logger.log("Fetching remote changes...")
+        try logger.log("[3] Fetching remote changes...")
         gitConfigure()
-        gitCommit(message: "Updates from \(instanceId.uuidString)")
+        gitCommit(message: "Updates from \(clientId.uuidString)")
         gitPull()
-        
-        mapping = (try? Mapping.load(from: mappingURL)) ?? Mapping()
 
-        try logger.log("Applying remote changes to local notes...")
-        try await updateNotesFromRemote(for: instanceId, with: gitRepoPath, using: &mapping)
+        try logger.log("[4] Applying remote changes to local notes...")
+        try await updateNotesFromRemote(localNotes: localNotes, with: gitRepoPath)
 
-        try logger.log("Removing remotely deleted notes...")
-        bearNoteIds = try await noteIdsFromBear(for: tags)
-        try await removeRemotelyDeletedNotes(localNoteIds: bearNoteIds, for: instanceId, using: mapping)
+        try logger.log("[5] Removing remotely deleted notes...")
+        localNotes = try await notesFromBear(for: localNoteIds) // TODO: Check if notes actually must be reloaded here.
+        try await removeRemotelyDeletedNotes(localNotes: localNotes, with: gitRepoPath)
 
-        try mapping.save(to: mappingURL)
-
-        try logger.log("Pushing changes to remote...")
-        gitCommit(message: "Additional updates from \(instanceId.uuidString)")
+        try logger.log("[6] Pushing changes to remote...")
+        gitCommit(message: "Additional updates from \(clientId.uuidString)")
         gitPush()
 
-        try logger.log("Done.")
+        try logger.log("[7] Done.")
         syncInProgress = false
     }
     
@@ -157,89 +151,101 @@ class Synchronizer {
         return allNoteIds
     }
 
-    private func exportNotes(noteIds: [NoteId],
-                             for instanceId: InstanceId,
-                             to baseURL: URL,
-                             using mapping: inout Mapping) async throws {
+    private func notesFromBear(for noteIds: [NoteId]) async throws -> [OpenNoteResult] {
+        var results: [OpenNoteResult] = []
         for noteId in noteIds {
-            let openNoteResult: OpenNoteResult
+            let result: OpenNoteResult
             if useSQLite {
-                openNoteResult = try await sqliteCom.openNote(noteId)
+                result = try await sqliteCom.openNote(noteId)
             } else {
-                openNoteResult = try await bearCom.openNote(noteId)
+                result = try await bearCom.openNote(noteId)
             }
+            results.append(result)
+        }
 
-            let fileId = mapping.fileId(for: openNoteResult.identifier, in: instanceId) ?? mapping.addNote(with: openNoteResult.identifier, for: instanceId)
-            try logger.log("Exporting note with fileId \(fileId)...")
+        return results
+    }
+
+    private func exportNotes(notes: [OpenNoteResult],
+                             to baseURL: URL) async throws {
+        for openNoteResult in notes {
+            let fileId: FileId
+            let note: String
+
+            if let existingFileId = openNoteResult.fileId {
+                fileId = existingFileId
+                note = openNoteResult.note
+                try logger.log("\(fileId) will be exported...", indentationLevel: 2)
+            } else {
+                fileId = FileId()
+                let text = "\(openNoteResult.note)\n\n[BearSync FileId]: <> (\(fileId.uuidString))\n"
+                let addTextResult = try await bearCom.replaceAllText(text, for: openNoteResult.identifier)
+                note = addTextResult.note
+                try logger.log("\(fileId) will be exported for the first time...", indentationLevel: 2)
+            }
 
             let filename = baseURL.appending(component: fileId.uuidString)
-            try openNoteResult.note.write(to: filename, atomically: true, encoding: .utf8)
+            try note.write(to: filename, atomically: true, encoding: .utf8)
         }
     }
     
-    private func removeLocallyDeletedNotes(excludedNoteIds: [NoteId],
-                                           for instanceId: InstanceId,
-                                           from baseURL: URL,
-                                           using mapping: inout Mapping) throws {
-        for note in mapping.notes {
-            if let fileNoteId = note.references[instanceId] {
-                if !excludedNoteIds.contains(fileNoteId) {
-                    try logger.log("Note with fileId \(note.fileId) was deleted locally. Removing it from repo...")
-                    let filename = baseURL.appending(component: note.fileId.uuidString)
-                    try FileManager.default.removeItem(at: filename)
-                    mapping.removeNote(note)
-                } else {
-                    try logger.log("Note with fileId \(note.fileId) still exists locally. Skipping...")
-                }
+    private func removeLocallyDeletedNotes(localNotes: [OpenNoteResult],
+                                           from baseURL: URL) throws {
+        let fileIds = try FileManager.default.contentsOfDirectory(at: baseURL, includingPropertiesForKeys: nil)
+            .map { $0.lastPathComponent }
+            .compactMap { FileId(uuidString: $0) }
+
+        for fileId in fileIds {
+            if !localNotes.contains(where: { $0.fileId == fileId }) {
+                let filename = baseURL.appending(component: fileId.uuidString)
+                try FileManager.default.removeItem(at: filename)
+                try logger.log("\(fileId) was deleted locally. Removing note from repo...", indentationLevel: 2)
             } else {
-                try logger.log("Note with fileId \(note.fileId) does not exist yet locally. Will be added later...")
+                try logger.log("\(fileId) still exists locally. Skipping...", indentationLevel: 2)
             }
         }
     }
     
-    private func updateNotesFromRemote(for instanceId: InstanceId,
-                                       with baseURL: URL,
-                                       using mapping: inout Mapping) async throws {
-        for note in mapping.notes {
-            if let noteId = note.references[instanceId] {  // Update
-                let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
-                let openNoteResult: OpenNoteResult
-                if useSQLite {
-                    openNoteResult = try await sqliteCom.openNote(noteId)
-                } else {
-                    openNoteResult = try await bearCom.openNote(noteId)
-                }
+    private func updateNotesFromRemote(localNotes: [OpenNoteResult],
+                                       with baseURL: URL) async throws {
+        let fileIds = try FileManager.default.contentsOfDirectory(at: baseURL, includingPropertiesForKeys: nil)
+            .map { $0.lastPathComponent }
+            .compactMap { FileId(uuidString: $0) }
 
+        for fileId in fileIds {
+            let text = try String(contentsOf: baseURL.appending(component: fileId.uuidString))
+
+            if let openNoteResult = localNotes.first(where: { $0.fileId == fileId }) { // Update
                 if openNoteResult.note.sha256 != text.sha256 {
-                    try logger.log("Note with fileId \(note.fileId) changed remotely. Applying changes...")
-                    _ = try await bearCom.addText(text, to: noteId)
+                    try logger.log("\(fileId) changed remotely. Applying changes...", indentationLevel: 2)
+                    _ = try await bearCom.replaceAllText(text, for: openNoteResult.identifier)
                 } else {
-                    try logger.log("Note with fileId \(note.fileId) unchanged. Skipping...")
+                    try logger.log("\(fileId) unchanged. Skipping...", indentationLevel: 2)
                 }
             } else { // Create
-                try logger.log("New note with fileId  \(note.fileId) created remotely. Adding note locally...")
-                let text = try String(contentsOf: baseURL.appending(component: note.fileId.uuidString))
-                guard let noteId = try? await bearCom.create(with: text).identifier,
-                      mapping.addReference(to: note.fileId, noteId: noteId, instanceId: instanceId) else {
-                    assertionFailure("Could not add reference to note!")
-                    try logger.log("ERROR: Could not add note with fileId \(note.fileId) locally!")
-                    return
-                }
+                try logger.log("\(fileId) was created remotely. Adding note locally...", indentationLevel: 2)
+                _ = try await bearCom.create(with: text)
             }
         }
     }
-    
-    private func removeRemotelyDeletedNotes(localNoteIds: [NoteId], 
-                                            for instanceId: InstanceId,
-                                            using mapping: Mapping) async throws {
-        for noteId in localNoteIds {
-            let fileId = mapping.fileId(for: noteId, in: instanceId)
 
-            if mapping.notes.contains(where: { $0.references.contains(where: { $0.value == noteId }) }) {
-                try logger.log("Note with fileId \(fileId?.uuidString ?? noteId) still exists remotely. Skipping...")
+    private func removeRemotelyDeletedNotes(localNotes: [OpenNoteResult],
+                                            with baseURL: URL) async throws {
+        let fileIds = try FileManager.default.contentsOfDirectory(at: baseURL, includingPropertiesForKeys: nil)
+            .map { $0.lastPathComponent }
+            .compactMap { FileId(uuidString: $0) }
+
+        for localNote in localNotes {
+            guard let fileId = localNote.fileId else {
+                try logger.log(">>>>> ERROR: Note does not have a fileId... At this point any local note should have one... SNAFU -.-")
+                continue
+            }
+
+            if fileIds.contains(fileId) {
+                try logger.log("\(fileId) still exists remotely. Skipping...", indentationLevel: 2)
             } else {
-                try logger.log("Note with fileId \(fileId?.uuidString ?? noteId) was deleted remotely. Removing it locally...")
-                _ = try await bearCom.trash(noteId: noteId)
+                try logger.log("\(fileId) was deleted remotely. Removing it locally...", indentationLevel: 2)
+                _ = try await bearCom.trash(noteId: localNote.identifier)
             }
         }
     }

@@ -8,6 +8,10 @@
 import SwiftUI
 import Combine
 
+typealias ClientId = UUID
+typealias NoteId = String // Note: For some (older?) notes, Bear uses invalid UUIDs like "BD3D2449-7240-4514-8562-7A8CFBC95898-521-0000212BF1260284"
+typealias FileId = UUID
+
 class BearCom {
 
     // MARK: - Properties
@@ -116,7 +120,7 @@ class BearCom {
         fatalError("Should never get here?!")
     }
 
-    func addText(_ text: String, to noteId: NoteId) async throws -> AddTextResult {
+    func replaceAllText(_ text: String, for noteId: NoteId) async throws -> AddTextResult {
         let requestId = UUID()
         let queryItems = [URLQueryItem(name: "id", value: noteId),
                           URLQueryItem(name: "text", value: text),

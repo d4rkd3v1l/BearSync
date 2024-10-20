@@ -9,7 +9,7 @@ import SwiftUI
 import KeychainAccess
 
 struct SettingsView: View {
-    @Preference(\.instanceId) var instanceId
+    @Preference(\.clientId) var clientId
     @Preference(\.bearAPIToken) var bearAPIToken
     @Preference(\.gitRepoURL) var gitRepoURL
     @Preference(\.tags) var tags
@@ -19,14 +19,14 @@ struct SettingsView: View {
     var body: some View {
         Form {
             HStack {
-                TextField("Instance ID:",
-                          text: Binding(get: { instanceId }, set: { _ in }),
+                TextField("Client ID:",
+                          text: Binding(get: { clientId }, set: { _ in }),
                           prompt: Text("Will be generated on first sync."))
                 .disabled(true)
                 Button("Copy") {
                     let pasteboard = NSPasteboard.general
                     pasteboard.declareTypes([.string], owner: nil)
-                    pasteboard.setString(instanceId, forType: .string)
+                    pasteboard.setString(clientId, forType: .string)
                 }
             }
             Text("The Instance ID of this BearSync installation.")
