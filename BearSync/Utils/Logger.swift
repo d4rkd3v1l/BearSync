@@ -18,8 +18,9 @@ final class Logger {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
     }
 
-    func log(_ message: String) throws {
-        let logEntry = "\(dateFormatter.string(from: Date.now)) \(message)\n"
+    func log(_ message: String, indentationLevel: Int = 0) throws {
+        let indentation = String(repeating: " ", count: indentationLevel * 4)
+        let logEntry = "\(dateFormatter.string(from: Date.now)) \(indentation)\(message)\n"
         let logData = logEntry.data(using: .utf8)!
 
         if let fileHandle = FileHandle(forWritingAtPath: logFile.path) {

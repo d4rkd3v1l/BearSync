@@ -49,12 +49,12 @@ final class BearComTests: XCTestCase {
     }
     
     func testAddTextSuccess() async throws {
-        let addTextResult = try await sut.addText("success", to: UUID().uuidString)
+        let addTextResult = try await sut.replaceAllText("success", for: UUID().uuidString)
         XCTAssertEqual(addTextResult.title, "Test2")
     }
     
     func testAddTextFailure() async throws {
-        let addTextResult = try? await sut.addText("failure", to: UUID().uuidString)
+        let addTextResult = try? await sut.replaceAllText("failure", for: UUID().uuidString)
         XCTAssertNil(addTextResult)
     }
     

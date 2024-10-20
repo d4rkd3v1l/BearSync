@@ -29,8 +29,8 @@ final class Preferences {
     @KeychainEntry(Constants.PreferencesKey.gitRepoURL.rawValue)
     var gitRepoURL: String = ""
 
-    @UserDefault(Constants.PreferencesKey.instanceId.rawValue)
-    var instanceId: String = ""
+    @UserDefault(Constants.PreferencesKey.clientId.rawValue)
+    var clientId: String = ""
 
     @UserDefault(Constants.PreferencesKey.tags.rawValue)
     var tags: [String] = []
