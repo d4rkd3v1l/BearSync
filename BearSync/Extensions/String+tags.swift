@@ -25,25 +25,25 @@ extension String {
             "`"
         }
 
-        let simpleLinkRegex = Regex {
-            "["
-            OneOrMore(.any)
-            "]"
-        }
-
         let linkRegex = Regex {
             "["
-            OneOrMore(.any)
+            OneOrMore(CharacterClass.anyOf("]").inverted)
             "]("
-            OneOrMore(.any)
+            OneOrMore(CharacterClass.anyOf(")").inverted)
             ")"
+        }
+
+        let simpleLinkRegex = Regex {
+            "["
+            OneOrMore(CharacterClass.anyOf("]").inverted)
+            "]"
         }
 
         let strippedSelf = self
             .replacing(codeBlockRegex, with: "")
             .replacing(inlineCodeRegex, with: "")
-            .replacing(simpleLinkRegex, with: "")
             .replacing(linkRegex, with: "")
+            .replacing(simpleLinkRegex, with: "")
 
 
         let tagRegex = Regex {
