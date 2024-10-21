@@ -19,17 +19,11 @@ struct SettingsView: View {
     var body: some View {
         Form {
             HStack {
-                TextField("Client ID:",
-                          text: Binding(get: { clientId }, set: { _ in }),
-                          prompt: Text("Will be generated on first sync."))
-                .disabled(true)
-                Button("Copy") {
-                    let pasteboard = NSPasteboard.general
-                    pasteboard.declareTypes([.string], owner: nil)
-                    pasteboard.setString(clientId, forType: .string)
-                }
+                TextField("Client Name:",
+                          text: $clientId,
+                          prompt: Text("Enter a name or description here."))
             }
-            Text("The Instance ID of this BearSync installation.")
+            Text("The name of this client, used as git author to identify clients.")
                 .font(.footnote)
                 .foregroundStyle(.gray)
             Spacer()

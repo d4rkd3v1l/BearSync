@@ -6,6 +6,7 @@
 //
 
 import CryptoKit
+import RegexBuilder
 
 extension String {
     var sha256: String? {
@@ -17,5 +18,21 @@ extension String {
             .joined()
         
         return hashString
+    }
+
+    var sanitizedMailName: String {
+        let notAllowed = Regex {
+          OneOrMore {
+            CharacterClass(
+              .anyOf("._%+-"),
+              ("a"..."z"),
+              ("A"..."Z"),
+              ("0"..."9")
+            ).inverted
+          }
+        }
+        .anchorsMatchLineEndings()
+
+        return self.replacing(notAllowed, with: "")
     }
 }

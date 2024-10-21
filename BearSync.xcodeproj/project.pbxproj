@@ -176,9 +176,9 @@
 				818037BB2AEEDE0300D3A37B /* Array+Extensions.swift */,
 				815296522B0CA48E00B80913 /* PublisherObservableObject.swift */,
 				8184021D2AEFB37C00B79D1C /* String+Extensions.swift */,
+				81EA2C002B7FE738008B55F3 /* String+tags.swift */,
 				81EE24AB2B11CA7A0070C08B /* TriggerButtonStyle.swift */,
 				81EE24A92B11CA620070C08B /* WindowAccessor.swift */,
-				81EA2C002B7FE738008B55F3 /* String+tags.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

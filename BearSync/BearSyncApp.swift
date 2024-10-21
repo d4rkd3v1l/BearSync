@@ -90,6 +90,12 @@ struct BearSyncApp: App {
             } catch {
                 if let syncError = error as? SyncError {
                     switch syncError {
+                    case .clientIdNotSet:
+                        icon = Constants.AppIconName.syncError.rawValue
+                        try await notificationManager.sendNotification(title: "Client name not set",
+                                                                       body: "Please provide a client name in settings.",
+                                                                       category: .showSettings)
+
                     case .bearAPITokenNotSet:
                         icon = Constants.AppIconName.syncError.rawValue
                         try await notificationManager.sendNotification(title: "Bear API Token not set",
