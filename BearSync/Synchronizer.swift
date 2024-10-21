@@ -178,7 +178,8 @@ class Synchronizer {
                 try logger.log("\(fileId) will be exported...", indentationLevel: 2)
             } else {
                 fileId = FileId()
-                let text = "\(openNoteResult.note)\n\n[BearSync FileId]: <> (\(fileId.uuidString))\n"
+                let trimmedNote = openNoteResult.note.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                let text = "\(trimmedNote)\n\n[BearSync FileId]: <> (\(fileId.uuidString))\n"
                 let addTextResult = try await bearCom.replaceAllText(text, for: openNoteResult.identifier)
                 note = addTextResult.note
                 try logger.log("\(fileId) will be exported for the first time...", indentationLevel: 2)
