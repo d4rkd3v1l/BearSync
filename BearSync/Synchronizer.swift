@@ -8,6 +8,7 @@
 import Foundation
 
 enum SyncError: Error {
+    case clientIdNotSet
     case bearAPITokenNotSet
     case gitRepoURLNotSet
     case gitRepoPathNotSet
@@ -60,9 +61,7 @@ class Synchronizer {
     
     @MainActor
     func synchronize() async throws {
-        let clientId = ClientId(uuidString: self.clientId) ?? ClientId()
-        self.clientId = clientId.uuidString
-
+        guard clientId != "" else { throw SyncError.clientIdNotSet }
         guard bearAPIToken != "" else { throw SyncError.bearAPITokenNotSet }
         guard gitRepoURL != "" else { throw SyncError.gitRepoURLNotSet }
         guard let gitRepoPath = try? OpenPanelHelper().getURL(for: Constants.UserDefaultsKey.gitRepoPathBookmark.rawValue) else { throw SyncError.gitRepoPathNotSet }
@@ -86,7 +85,7 @@ class Synchronizer {
 
         try logger.log("[3] Fetching remote changes...")
         gitConfigure()
-        gitCommit(message: "Updates from \(clientId.uuidString)")
+        gitCommit(message: "Updates from \(clientId)")
         gitPull()
 
         try logger.log("[4] Applying remote changes to local notes...")
@@ -97,7 +96,7 @@ class Synchronizer {
         try await removeRemotelyDeletedNotes(localNotes: localNotes, with: gitRepoPath)
 
         try logger.log("[6] Pushing changes to remote...")
-        gitCommit(message: "Additional updates from \(clientId.uuidString)")
+        gitCommit(message: "Additional updates from \(clientId)")
         gitPush()
 
         try logger.log("[7] Done.")
@@ -108,8 +107,8 @@ class Synchronizer {
     
     // MARK: Git
     private func gitConfigure() {
-        systemCom.bash("git config user.name \"\(Constants.GitConfig.username.rawValue)\"")
-        systemCom.bash("git config user.email \"\(Constants.GitConfig.mail.rawValue)\"")
+        systemCom.bash("git config user.name \"\(clientId)\"")
+        systemCom.bash("git config user.email \"\(clientId.sanitizedMailName)@bear.sync\"")
         systemCom.bash("git remote set-url origin \(gitRepoURL)")
         systemCom.bash("echo \".DS_Store\nsync.log\n\" > .gitignore")
     }

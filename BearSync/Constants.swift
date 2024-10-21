@@ -21,11 +21,6 @@ struct Constants {
         case useSQLite
     }
 
-    enum GitConfig: String {
-        case username = "BearSync"
-        case mail = "be@r.sync"
-    }
-
     enum AppIconName: String {
         case idle = "arrow.triangle.2.circlepath"
         case syncInProgress = "clock.arrow.2.circlepath"
