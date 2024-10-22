@@ -9,17 +9,44 @@ import SwiftUI
 import KeychainAccess
 import UserNotifications
 
+enum Status {
+    case idle
+    case syncInProgress(progress: Double)
+    case syncError
+    case done
+
+    var icon: String {
+        switch self {
+        case .idle: "arrow.trianglehead.2.counterclockwise.rotate.90"
+        case .syncInProgress: "clock.arrow.trianglehead.2.counterclockwise.rotate.90"
+        case .syncError: "exclamationmark.arrow.trianglehead.2.clockwise.rotate.90"
+        case .done: "checkmark.circle"
+        }
+    }
+
+    var progress: String {
+        switch self {
+        case .idle: "Idle"
+        case .syncInProgress(let progress): "Synchronizing... \(Int((progress*100).rounded()))%"
+        case .syncError: "Error"
+        case .done: "Finished"
+        }
+    }
+}
+
 @main
 struct BearSyncApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @State private var icon = Constants.AppIconName.idle.rawValue
+    @State private var status = Status.idle
     @State private var settingsWindow: NSWindow?
 
     private let openSettingsAction = TriggerButtonAction()
     private let notificationManager = NotificationManager()
 
     var body: some Scene {
-        MenuBarExtra("Bear Sync", systemImage: icon) {
+        MenuBarExtra("Bear Sync", systemImage: status.icon) {
+            Text("Status: \(status.progress)")
+
             Button("Synchronize") {
                 synchronize()
             }
@@ -84,38 +111,46 @@ struct BearSyncApp: App {
             }
 
             do {
-                icon = Constants.AppIconName.syncInProgress.rawValue
-                try await Synchronizer.shared.synchronize()
-                icon = Constants.AppIconName.idle.rawValue
+                status = .syncInProgress(progress: 0)
+                try await Synchronizer.shared.synchronize() { progress in
+                    if progress == 1.0 {
+                        status = .done
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            status = .idle
+                        }
+                    } else {
+                        status = .syncInProgress(progress: progress)
+                    }
+                }
             } catch {
                 if let syncError = error as? SyncError {
                     switch syncError {
                     case .clientIdNotSet:
-                        icon = Constants.AppIconName.syncError.rawValue
+                        status = .syncError
                         try await notificationManager.sendNotification(title: "Client name not set",
                                                                        body: "Please provide a client name in settings.",
                                                                        category: .showSettings)
 
                     case .bearAPITokenNotSet:
-                        icon = Constants.AppIconName.syncError.rawValue
+                        status = .syncError
                         try await notificationManager.sendNotification(title: "Bear API Token not set",
                                                                        body: "Please provide your Bear API Token in settings.",
                                                                        category: .showSettings)
 
                     case .gitRepoURLNotSet:
-                        icon = Constants.AppIconName.syncError.rawValue
+                        status = .syncError
                         try await notificationManager.sendNotification(title: "Git Repo URL not set",
                                                                        body: "Please provide your git repo URL in settings.",
                                                                        category: .showSettings)
 
                     case .gitRepoPathNotSet:
-                        icon = Constants.AppIconName.syncError.rawValue
+                        status = .syncError
                         try await notificationManager.sendNotification(title: "Git repo path not set",
                                                                        body: "Please provide the path to the git repo in settings.",
                                                                        category: .showSettings)
 
                     case .syncInProgress:
-                        icon = Constants.AppIconName.syncInProgress.rawValue
+                        status = .syncError
                         try await notificationManager.sendNotification(title: "Sync already in progress",
                                                                        body: "Please wait until the current sync finished.")
                     }

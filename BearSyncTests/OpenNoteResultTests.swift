@@ -24,10 +24,7 @@ with some stuff inside
 [BearSync FileId]: <> (7EB77B9E-7242-40AB-9C12-C84AC8648155)
 
 """
-
         let sut = OpenNoteResult(note: note, identifier: "", title: "", tags: "", isTrashed: "", modificationDate: "", creationDate: "")
-
-
         XCTAssertEqual(try XCTUnwrap(sut.fileId), UUID(uuidString: "7EB77B9E-7242-40AB-9C12-C84AC8648155"))
     }
 
@@ -43,10 +40,7 @@ with some stuff inside
 ---
 #some #tags #justbecause
 """
-
         let sut = OpenNoteResult(note: note, identifier: "", title: "", tags: "", isTrashed: "", modificationDate: "", creationDate: "")
-
-
         XCTAssertNil(sut.fileId)
     }
 
@@ -65,10 +59,7 @@ with some stuff inside
 [BearSync FileId]: <> (some-stuff-thats-not-a-uuid)
 
 """
-
         let sut = OpenNoteResult(note: note, identifier: "", title: "", tags: "", isTrashed: "", modificationDate: "", creationDate: "")
-
-
         XCTAssertNil(sut.fileId)
     }
 }
