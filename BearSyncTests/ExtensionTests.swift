@@ -22,4 +22,10 @@ final class ExtensionTests: XCTestCase {
         
         XCTAssertEqual(try XCTUnwrap(sut["anotherName"]), "anotherValue")
     }
+
+    func testSanitizedMailName() throws {
+        let sut = "xO/\"0'd!1\\T!mg$K=gR-2_*U%jW+4a(´)`{sadf}]🍺"
+
+        XCTAssertEqual(sut.sanitizedMailName, "xO0d1TmgKgR-2_U%jW+4asadf")
+    }
 }

@@ -25,6 +25,7 @@
 		818037CF2AEEE88B00D3A37B /* BearComError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818037CE2AEEE88B00D3A37B /* BearComError.swift */; };
 		8184021E2AEFB37C00B79D1C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8184021D2AEFB37C00B79D1C /* String+Extensions.swift */; };
 		818402202AEFB3B900B79D1C /* ExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8184021F2AEFB3B900B79D1C /* ExtensionTests.swift */; };
+		81A6DF0D2CC792F100A77C0B /* SecureRevealableField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A6DF0C2CC792F100A77C0B /* SecureRevealableField.swift */; };
 		81A8AA922B0E378000056532 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA912B0E378000056532 /* Constants.swift */; };
 		81A8AA942B0E3C8800056532 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA932B0E3C8800056532 /* Logger.swift */; };
 		81A8AA962B0F32F300056532 /* PreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A8AA952B0F32F300056532 /* PreferencesTests.swift */; };
@@ -90,6 +91,7 @@
 		818037D02AEFA80F00D3A37B /* BearSync.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = BearSync.xctestplan; sourceTree = "<group>"; };
 		8184021D2AEFB37C00B79D1C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		8184021F2AEFB3B900B79D1C /* ExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionTests.swift; sourceTree = "<group>"; };
+		81A6DF0C2CC792F100A77C0B /* SecureRevealableField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureRevealableField.swift; sourceTree = "<group>"; };
 		81A8AA912B0E378000056532 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		81A8AA932B0E3C8800056532 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		81A8AA952B0F32F300056532 /* PreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTests.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				81E4C5B62ACD535B00BEAA2A /* BearSync.entitlements */,
 				81535EA12B63B567003598BD /* test.sqlite */,
 				81E4C5AD2ACD535A00BEAA2A /* BearSyncApp.swift */,
+				81A6DF0C2CC792F100A77C0B /* SecureRevealableField.swift */,
 				81A8AA912B0E378000056532 /* Constants.swift */,
 				81C679B22AE3DEBA00C24537 /* Info.plist */,
 				8147DB842B113F59005F8736 /* SettingsView.swift */,
@@ -452,6 +455,7 @@
 				818037C32AEEE76E00D3A37B /* CreateResult.swift in Sources */,
 				81E4C5AE2ACD535A00BEAA2A /* BearSyncApp.swift in Sources */,
 				81EE24B12B11CB070070C08B /* KeychainEntry.swift in Sources */,
+				81A6DF0D2CC792F100A77C0B /* SecureRevealableField.swift in Sources */,
 				8176ED662AD9720600D1BE24 /* OpenPanelHelper.swift in Sources */,
 				81A8AA922B0E378000056532 /* Constants.swift in Sources */,
 				81EE24AF2B11CAE80070C08B /* Preference.swift in Sources */,

@@ -28,17 +28,18 @@ struct SettingsView: View {
                 .foregroundStyle(.gray)
             Spacer()
 
-            SecureField("Bear API Token:",
-                        text: $bearAPIToken,
-                        prompt: Text("Required"))
+            SecureRevealableField("Bear API Token:",
+                                  text: $bearAPIToken,
+                                  prompt: Text("Required"))
+
             Text("Bear → Help → Advanced → API Token")
                 .font(.footnote)
                 .foregroundStyle(.gray)
             Spacer()
 
-            SecureField("Git repo URL:",
-                        text: $gitRepoURL,
-                        prompt: Text("Required"))
+            SecureRevealableField("Git repo URL:",
+                                  text: $gitRepoURL,
+                                  prompt: Text("Required"))
             Text("The remote URL of the git repo, used for synchronizing.\nE.g. \"https://<token>@github.com/<user>/bear-sync.git\"")
                 .font(.footnote)
                 .foregroundStyle(.gray)
@@ -70,13 +71,13 @@ struct SettingsView: View {
 
             Toggle("Use SQLite:",
                    isOn: $useSQLite)
-                .toggleStyle(.switch)
+            .toggleStyle(.switch)
             Text("Using SQLite for some read operations will remove flickering and focus change during sync. However, this is not officially supported by Bear App and therefore may lead to issues.")
                 .font(.footnote)
                 .foregroundStyle(.gray)
             Spacer()
 
-            #if DEBUG
+#if DEBUG
             Spacer()
             Spacer()
             Spacer()
@@ -88,6 +89,7 @@ struct SettingsView: View {
             }
             #endif
         }
+        .textFieldStyle(.roundedBorder)
         .padding()
         .frame(width: 500)
         .fixedSize()

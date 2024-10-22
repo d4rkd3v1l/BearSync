@@ -60,7 +60,7 @@ class Synchronizer {
     // MARK: - Synchronize
     
     @MainActor
-    func synchronize() async throws {
+    func synchronize(progress: (_ progress: Double) -> Void) async throws {
         guard clientId != "" else { throw SyncError.clientIdNotSet }
         guard bearAPIToken != "" else { throw SyncError.bearAPITokenNotSet }
         guard gitRepoURL != "" else { throw SyncError.gitRepoURLNotSet }
@@ -75,31 +75,38 @@ class Synchronizer {
         try logger.log("--- Starting sync with tags: \(tags.map({ "#\($0)" }).joined(separator: " ")) ---")
 
         try logger.log("[1] Exporting local notes...")
+        progress(1/7)
         let localNoteIds = try await noteIdsFromBear(for: tags)
         var localNotes = try await notesFromBear(for: localNoteIds)
         try await exportNotes(notes: localNotes, to: gitRepoPath)
 
         try logger.log("[2] Removing locally deleted notes...")
+        progress(2/7)
         localNotes = try await notesFromBear(for: localNoteIds)
         try removeLocallyDeletedNotes(localNotes: localNotes, from: gitRepoPath)
 
         try logger.log("[3] Fetching remote changes...")
+        progress(3/7)
         gitConfigure()
         gitCommit(message: "Updates from \(clientId)")
         gitPull()
 
         try logger.log("[4] Applying remote changes to local notes...")
+        progress(4/7)
         try await updateNotesFromRemote(localNotes: localNotes, with: gitRepoPath)
 
         try logger.log("[5] Removing remotely deleted notes...")
+        progress(5/7)
         localNotes = try await notesFromBear(for: localNoteIds) // TODO: Check if notes actually must be reloaded here.
         try await removeRemotelyDeletedNotes(localNotes: localNotes, with: gitRepoPath)
 
         try logger.log("[6] Pushing changes to remote...")
+        progress(6/7)
         gitCommit(message: "Additional updates from \(clientId)")
         gitPush()
 
         try logger.log("[7] Done.")
+        progress(7/7)
         syncInProgress = false
     }
     
